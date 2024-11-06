@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Loader from "../components/Loader";
-import SideBar from "../components/SideBar";
+import SideBar from "../components/SideBar/SideBar";
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
 
