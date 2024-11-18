@@ -5,7 +5,7 @@ export const theme = createTheme({
     MuiTypography: {
       styleOverrides: {
         root: {
-          fontFamily: "Comic Sans MS, sans-serif"
+          fontFamily: "Poppins, sans-serif"
         },
         h1: {
           fontSize: "2.5rem",
