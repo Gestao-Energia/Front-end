@@ -2,3 +2,46 @@
    margin: 0;
    padding: 0; 
 }
+.sideBar ul, a{
+   list-style-type: none;
+   text-decoration: none;
+   color: #FFF;
+   
+ }
+ .sideBar ul li{
+   padding-bottom: 24px;
+   font-size: 14px;
+ }
+.sideBar{
+   display: flex;
+   width: 200px;
+   justify-content: left;
+   flex-direction: column;
+   height: 100vh;
+   color: #FFF;
+   background-color: #2C3E50;
+   padding: 57px 0px 0px 47px;
+}
+img{
+   width: 88px;
+   height: 35px;
+}
+.user-info{
+   display: flex;
+   flex-direction: column;
+   margin: 18px 0px 59px;
+   gap: 60px;
+}
+.user-info img{
+   height: 81px;
+   width: 72px;
+}
+.information h2{
+   margin-bottom: 4px;
+   font-size: 30px;
+   font-weight: 600;
+}
+.information p{
+   font-size: 14px;
+   font-weight: 400;
+}
