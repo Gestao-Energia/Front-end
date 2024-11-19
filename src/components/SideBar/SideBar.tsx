@@ -23,19 +23,19 @@ export default function SideBar () {
               <Link to={'/dashboard'}>Dashboard</Link>
             </li>
             <li>
-              <Link to={'/cadastro'}>Cadastro de novos usuarios</Link>
+              <Link to={'/register'}>Cadastro de novos usuarios</Link>
             </li>
             <li>
-              <Link to={'/acesso'}>Controle de acesso</Link>
+              <Link to={'/accessControl'}>Controle de acesso</Link>
             </li>
             <li>
-              <Link to={'/relatorio'}>Relatorio de consumo</Link>
+              <Link to={'/report'}>Relatorio de consumo</Link>
             </li>
             <li>
-              <Link to={'/monitoramento'}>Monitoramento de secretaria</Link>
+              <Link to={'/monitoring'}>Monitoramento de secretaria</Link>
             </li>
             <li>
-              <Link to={'/perfil'}>perfil</Link>
+              <Link to={'/profile'}>perfil</Link>
             </li>
           </ul>
       </div>
