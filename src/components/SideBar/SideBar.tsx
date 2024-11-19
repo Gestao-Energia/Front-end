@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import logo from '../../assets/logo.png'
 import  './SideBar.css'
-import { Avatar } from '@mui/material'
+import { Avatar, Typography } from '@mui/material'
 export default function SideBar () {
     return (
       <div className='sideBar'>
@@ -12,8 +12,8 @@ export default function SideBar () {
             <Avatar variant='square'  src='' sx={{width:72, height:81}}/>
 
           <div className='information'>
-            <h2 id='userName'>Nome</h2>
-            <p id='userEmail'>email@testes.com</p>
+            <Typography variant='h2'>Nome</Typography>
+            <Typography variant='body1'>email@teste.com</Typography>
           </div>
 
         </div>
