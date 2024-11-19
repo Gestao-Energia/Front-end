@@ -14,14 +14,15 @@
  }
 .sideBar{
    display: flex;
-   width: 200px;
+   width: 250px;
    justify-content: left;
    flex-direction: column;
-   height: 100vh;
+   height: calc(100vh - 57px);
    color: #FFF;
    background-color: #2C3E50;
    padding: 57px 0px 0px 47px;
 }
+
 img{
    width: 88px;
    height: 35px;
