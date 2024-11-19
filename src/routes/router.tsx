@@ -10,6 +10,7 @@ import Register from "../pages/Register";
 import AccessControl from "../pages/AccessControl";
 import Report from "../pages/Report";
 import Monitoring from "../pages/Monitoring";
+import Login from "../pages/Login/Login";
 
 export default function Router() {
   return (
@@ -23,6 +24,7 @@ export default function Router() {
         <Route path="/monitoring" element={<Monitoring />}/>
         <Route path="/profile" element={<Profile />}/>
       </Route>
+      <Route path="/login" element={<Login />}/>
     </Routes>
   )
 }
