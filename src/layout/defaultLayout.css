@@ -1,0 +1,19 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.main-application {
+    background-color: #2C3E50;
+    width: 100vw;
+    height: calc(100vh - 60px);
+    padding: 30px;
+}
+
+.main-content {
+    background: #FFF;
+    height: calc(100% - 40px);
+    border-radius: 40px;
+    padding: 24px;
+    overflow-y: auto;
+}

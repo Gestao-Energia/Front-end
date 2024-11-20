@@ -2,21 +2,21 @@ import { Suspense } from "react";
 import Loader from "../components/Loader";
 import SideBar from "../components/SideBar";
 import { Outlet } from "react-router-dom";
-import Header from "../components/Header";
+import './defaultLayout.css'
+import { Stack } from "@mui/material";
 
 function DefaultLayout() {
   return (
     <>
       <Suspense fallback={<Loader />}>
-        <div className="flex">
+        <Stack direction={'row'}>
           <SideBar />
-          <div className="w-full">
-            <Header />
-            <main>
+          <main className="main-application">
+            <div className="main-content">
               <Outlet />
-            </main>
-          </div>
-        </div>
+            </div>
+          </main>
+        </Stack>
       </Suspense>
     </>
   );
