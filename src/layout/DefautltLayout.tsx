@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Loader from "../components/Loader";
-import SideBar from "../components/SideBar/SideBar";
+import SideBar from "../components/SideBar";
 import { Outlet } from "react-router-dom";
 import './defaultLayout.css'
 import { Stack } from "@mui/material";
