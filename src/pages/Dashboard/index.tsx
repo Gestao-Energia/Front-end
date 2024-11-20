@@ -10,7 +10,7 @@ export default function Dashboard() {
             <Stack direction={"row"} width={'100%'} height={'390px'}>
                 <Box sx={{ flex: 1, padding: '30px' }}>
                     <Typography mb={'16px'} variant="subtitle1">Top 3 Maior Ultilização - Mensal</Typography>
-                    <Stack direction={'row'}>
+                    <Stack direction={'row'} gap={5}>
                         <Stack alignItems={"center"}>
                             <GaugeGraph value={80} color={'#D84B16'} />
                             <Typography variant="subtitle1">Sect</Typography>
