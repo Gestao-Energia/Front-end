@@ -2,7 +2,6 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import Home from "../pages/Home";
 import DefaultLayout from "../layout/DefautltLayout";
 import Profile from "../pages/Profile";
 import Dashboard from "../pages/Dashboard";
@@ -16,7 +15,7 @@ export default function Router() {
   return (
     <Routes>
       <Route path="/" element={<DefaultLayout />}>
-        <Route path="/" element={<Home />}/>
+        <Route path="/" element={<Dashboard />}/>
         <Route path="/dashboard" element={<Dashboard />}/>
         <Route path="/register" element={<Register />}/>
         <Route path="/accessControl" element={<AccessControl />}/>
