@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material";
+import './globalStyle.css'
 
 export const theme = createTheme({
   components: {

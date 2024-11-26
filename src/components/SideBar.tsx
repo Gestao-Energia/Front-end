@@ -1,5 +1,5 @@
-import { Link, NavLink } from 'react-router-dom'
-import { Avatar, List, ListItem, ListItemText, Stack, Typography } from '@mui/material'
+import { NavLink } from 'react-router-dom'
+import { Avatar, Stack, Typography } from '@mui/material'
 import logo from '../assets/logo.png'
 import ProFileImage from '../assets/DefaultProfileImage.png'
 
@@ -14,7 +14,7 @@ export default function SideBar() {
   ];
 
   return (
-    <aside className='sideBar' style={
+    <aside style={
       {backgroundColor: '#2C3E50', display:'flex', flexDirection:'column', padding: '57px 0px 0px 47px', height: 'calc(100vh - 57px)', width:250, color: '#FFF'}}>
 
       <img src={logo} alt="Logo"  style={{width: 88, height: 35, marginBottom: 24}}/>
