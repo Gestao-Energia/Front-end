@@ -1,5 +1,7 @@
+import { Search } from "@mui/icons-material";
 import { Box, Paper } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import DataTable from "../../components/DataTable";
 
 interface Row {
     id: number;
@@ -51,20 +53,16 @@ export default function AccessControl() {
               },
         },
       ];
-      console.log('Rows:', rows); // Verifique no console os dados completos das linhas
-
+      console.log('Rows:', rows);
       
     return (
         <Box>
             <Paper>
-                SearchBar
+              
             </Paper>
-            <DataGrid 
-                columns={columns}
-                rows= {rows}
-            >
-
-            </DataGrid>
+            <DataTable rows={rows} columns={columns} pageSize={3}
+            
+            />
         </Box>
     )
 }
