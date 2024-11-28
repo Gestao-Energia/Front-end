@@ -22,11 +22,19 @@ export default function DataTable<T>({rows, columns, pageSize}: CustomDataGridPr
         <Box sx={{
             display:"flex",
             flexDirection:"column",
+            gap: 1,
         }}>
+            
             <DataGrid
             rows={currentRows}
             columns={columns}
+            disableColumnResize
             hideFooter
+            sx={{
+                '& .MuiDataGrid-columnHeader': {
+                  backgroundColor: '#E5EDF8',
+                },
+              }}
             />
 
             <Box sx={{
@@ -35,25 +43,27 @@ export default function DataTable<T>({rows, columns, pageSize}: CustomDataGridPr
                 width: '100%'
             }}>
 
-            <Pagination
-             count={Math.ceil(rows.length / pageSize)} 
-             page={currentPage} 
-             onChange={handlePageChange} 
-             hidePrevButton 
-             hideNextButton
-             variant="outlined"
-            sx={{
-                "& .MuiPaginationItem-root": {
-                backgroundColor: "rgba(47, 128, 237, 0.2)", // Cor com 20% de opacidade
-                "&:hover": {
-                    backgroundColor: "rgba(47, 128, 237, 0.4)", // Cor mais opaca ao passar o mouse
-                },
-                "&.Mui-selected": {
-                    backgroundColor: "rgba(47, 128, 237, 0.4)", // Cor da bolinha selecionada
-                }
-                },
-            }}
-            />
+                <Pagination
+                count={Math.ceil(rows.length / pageSize)} 
+                page={currentPage} 
+                onChange={handlePageChange} 
+                hidePrevButton 
+                hideNextButton
+                variant="outlined"
+                sx={{
+                    "& .MuiPaginationItem-root": {
+                    backgroundColor: "rgba(204, 204, 204, 0.5)",
+                    margin: 1,
+                    fontWeight:'600',
+                    "&:hover": {
+                        backgroundColor: "rgba(47, 128, 237, 0.2)", 
+                    },
+                    "&.Mui-selected": {
+                        backgroundColor: "rgba(47, 128, 237, 0.2)", 
+                    }
+                    },
+                }}
+                />
             </Box>
 
         </Box>
