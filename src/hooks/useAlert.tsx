@@ -1,4 +1,4 @@
-import { Alert, AlertColor, AlertTitle, Collapse, Snackbar, SnackbarCloseReason } from "@mui/material";
+import { Alert, AlertColor, AlertTitle, Snackbar, SnackbarCloseReason } from "@mui/material";
 import { createContext, ReactNode, useState } from "react";
 
 interface AlertType {
