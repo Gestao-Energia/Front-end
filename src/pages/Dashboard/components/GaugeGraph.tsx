@@ -35,7 +35,7 @@ export default function GaugeGraph({
       } else {
         clearInterval(interval);
       }
-    }, 10);
+    }, 2);
   }, [ref, inView, value]);
 
   const settings = {
