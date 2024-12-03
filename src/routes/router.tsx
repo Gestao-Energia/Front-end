@@ -8,6 +8,7 @@ import Report from "../pages/Report";
 import Monitoring from "../pages/Monitoring";
 import Login from "../pages/Login/Login";
 import { RegisterUserFormProvider } from "../contexts/registerUserContext";
+import ReportDetails from "../pages/ReportDetails";
 
 export default function Router() {
   return (
@@ -25,6 +26,7 @@ export default function Router() {
         />
         <Route path="/accessControl" element={<AccessControl />} />
         <Route path="/report" element={<Report />} />
+        <Route path="/report/:reportId" element={<ReportDetails />} />
         <Route path="/monitoring" element={<Monitoring />} />
         <Route path="/profile" element={<Profile />} />
       </Route>
