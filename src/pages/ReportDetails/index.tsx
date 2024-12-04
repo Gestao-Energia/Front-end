@@ -21,14 +21,14 @@ import TuneIcon from "@mui/icons-material/Tune";
 import { useState } from "react";
 
 enum FilterOptions {
-  ANUAL = "Anual",
-  MENSAL = "Mensal",
+  ANNUAL = "Anual",
+  MONTHLY = "Mensal",
 }
 
 export default function ReportDetails() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [periodicity, setPeriodicity] = useState<FilterOptions>(
-    FilterOptions.ANUAL,
+    FilterOptions.ANNUAL,
   );
 
   const open = Boolean(anchorEl);
@@ -167,7 +167,7 @@ export default function ReportDetails() {
             {
               type: "bar",
               data:
-                periodicity === FilterOptions.ANUAL
+                periodicity === FilterOptions.ANNUAL
                   ? chartDataYear
                   : chartDataMonth,
             },
@@ -175,7 +175,7 @@ export default function ReportDetails() {
           xAxis={[
             {
               data:
-                periodicity === FilterOptions.ANUAL
+                periodicity === FilterOptions.ANNUAL
                   ? xLabelsYear
                   : xLabelsMonth,
               scaleType: "band",
@@ -186,7 +186,7 @@ export default function ReportDetails() {
             {
               min: 0,
               max:
-                periodicity === FilterOptions.ANUAL
+                periodicity === FilterOptions.ANNUAL
                   ? Math.max(...chartDataYear)
                   : Math.max(...chartDataMonth),
               scaleType: "linear",
