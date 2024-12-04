@@ -18,12 +18,26 @@ import {
   Typography,
 } from "@mui/material";
 import TuneIcon from "@mui/icons-material/Tune";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 enum FilterOptions {
   ANNUAL = "Anual",
   MONTHLY = "Mensal",
 }
+
+const chartSetting = {
+  colors: ["#4285F4"],
+  sx: {
+    padding: "10px",
+    maxHeight: "1100px",
+    [`.${axisClasses.left} .${axisClasses.label}`]: {
+      transform: "translate(-30px, 0)",
+    },
+    [`.${axisClasses.line}, .${axisClasses.tick}`]: {
+      strokeWidth: "0 !important",
+    },
+  },
+};
 
 export default function ReportDetails() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -34,52 +48,6 @@ export default function ReportDetails() {
   const open = Boolean(anchorEl);
 
   const filterOptions = Object.values(FilterOptions);
-
-  const chartDataYear = [4000, 3000, 2000, 2780, 1890, 2390, 3490, 1237];
-
-  const xLabelsYear = [
-    "2017",
-    "2018",
-    "2019",
-    "2020",
-    "2021",
-    "2022",
-    "2023",
-    "2024",
-  ];
-
-  const chartDataMonth = [
-    500, 300, 200, 780, 190, 230, 390, 237, 645, 123, 903, 186,
-  ];
-
-  const xLabelsMonth = [
-    "JAN",
-    "FEV",
-    "MAR",
-    "ABR",
-    "MAI",
-    "JUN",
-    "JUL",
-    "AGO",
-    "SET",
-    "OUT",
-    "NOV",
-    "DEZ",
-  ];
-
-  const chartSetting = {
-    colors: ["#4285F4"],
-    sx: {
-      padding: "10px",
-      maxHeight: "1100px",
-      [`.${axisClasses.left} .${axisClasses.label}`]: {
-        transform: "translate(-30px, 0)",
-      },
-      [`.${axisClasses.line}, .${axisClasses.tick}`]: {
-        strokeWidth: "0 !important",
-      },
-    },
-  };
 
   const handleOpenFilterMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -93,6 +61,44 @@ export default function ReportDetails() {
     setPeriodicity(option);
     handleCloseFilterMenu();
   };
+
+  const getChartData = useCallback(() => {
+    const chartDataYear = [4000, 3000, 2000, 2780, 1890, 2390, 3490, 1237];
+    const xLabelsYear = [
+      "2017",
+      "2018",
+      "2019",
+      "2020",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+    ];
+    const chartDataMonth = [
+      500, 300, 200, 780, 190, 230, 390, 237, 645, 123, 903, 186,
+    ];
+    const xLabelsMonth = [
+      "JAN",
+      "FEV",
+      "MAR",
+      "ABR",
+      "MAI",
+      "JUN",
+      "JUL",
+      "AGO",
+      "SET",
+      "OUT",
+      "NOV",
+      "DEZ",
+    ];
+
+    if (periodicity === FilterOptions.ANNUAL) {
+      return { chartData: chartDataYear, labels: xLabelsYear };
+    }
+    return { chartData: chartDataMonth, labels: xLabelsMonth };
+  }, [periodicity]);
+
+  const { chartData, labels } = useMemo(() => getChartData(), [getChartData]);
 
   return (
     <>
@@ -166,18 +172,12 @@ export default function ReportDetails() {
           series={[
             {
               type: "bar",
-              data:
-                periodicity === FilterOptions.ANNUAL
-                  ? chartDataYear
-                  : chartDataMonth,
+              data: chartData,
             },
           ]}
           xAxis={[
             {
-              data:
-                periodicity === FilterOptions.ANNUAL
-                  ? xLabelsYear
-                  : xLabelsMonth,
+              data: labels,
               scaleType: "band",
               id: "x-axis-id",
             },
@@ -185,10 +185,7 @@ export default function ReportDetails() {
           yAxis={[
             {
               min: 0,
-              max:
-                periodicity === FilterOptions.ANNUAL
-                  ? Math.max(...chartDataYear)
-                  : Math.max(...chartDataMonth),
+              max: Math.max(...chartData),
               scaleType: "linear",
               id: "y-axis-id",
               valueFormatter: (value) => `${value} kw`,
@@ -199,7 +196,7 @@ export default function ReportDetails() {
           <BarPlot borderRadius={10} />
           <ChartsXAxis position="bottom" axisId="x-axis-id" />
           <ChartsYAxis position="left" axisId="y-axis-id" />
-          <ChartsReferenceLine y={2000} />
+          <ChartsReferenceLine y={Math.max(...chartData) / 2} />
         </ResponsiveChartContainer>
       </Box>
       <Stack>
