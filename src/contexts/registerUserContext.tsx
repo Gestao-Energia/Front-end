@@ -5,15 +5,15 @@ import { z, ZodError } from "zod";
 enum Role {
   Administrator = "Administrador",
   Manager = "Gestor",
-  Common = "Operador"
+  Common = "Operador",
 }
 
- export interface FormData {
+export interface FormData {
   name: string;
   email: string;
   contactNumber: string;
   userName: string;
-  role: Role
+  role: Role;
 }
 
 const formSchema = z.object({
@@ -21,25 +21,30 @@ const formSchema = z.object({
   email: z.string().email().min(1, { message: "Campo obrigatório" }),
   contactNumber: z.number().min(1, { message: "Campo obrigatório" }),
   userName: z.string().min(1, { message: "Campo obrigatório" }),
-  role: z.enum([Role.Administrator, Role.Manager, Role.Common])
+  role: z.enum([Role.Administrator, Role.Manager, Role.Common]),
 });
 
 interface FormContextType {
-  form:  UseFormReturn<FormData>;
+  form: UseFormReturn<FormData>;
   onSubmit: SubmitHandler<FormData>;
 }
 
-export const RegisterUserFormContext = createContext<FormContextType | undefined>(undefined);
+export const RegisterUserFormContext = createContext<
+  FormContextType | undefined
+>(undefined);
 
-export const RegisterUserFormProvider = ({ children }: { children: ReactNode }) => {
-
+export const RegisterUserFormProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
   const form = useForm<FormData>({
     resolver: async (data) => {
       try {
         formSchema.parse(data);
         return { values: data, errors: {} };
       } catch (err) {
-        const zodError = err as ZodError<FormData>;        
+        const zodError = err as ZodError<FormData>;
         return {
           values: {},
           errors: zodError.errors.reduce<Record<string, { message: string }>>(
@@ -47,7 +52,7 @@ export const RegisterUserFormProvider = ({ children }: { children: ReactNode }) 
               acc[current.path[0]] = { message: current.message };
               return acc;
             },
-            {}
+            {},
           ),
         };
       }

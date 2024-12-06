@@ -1,3 +1,3 @@
 export default function AccessControl() {
-    return <h1>AccessControl Page</h1>
+  return <h1>AccessControl Page</h1>;
 }
