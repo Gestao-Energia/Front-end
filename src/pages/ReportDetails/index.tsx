@@ -28,8 +28,8 @@ enum FilterOptions {
 const chartSetting = {
   colors: ["#4285F4"],
   sx: {
-    padding: "10px",
-    maxHeight: "1100px",
+    padding: "0.625rem",
+    maxHeight: "68.75rem",
     [`.${axisClasses.left} .${axisClasses.label}`]: {
       transform: "translate(-30px, 0)",
     },
@@ -157,12 +157,12 @@ export default function ReportDetails() {
         direction={"row"}
         justifyContent={"space-between"}
         alignItems={"center"}
-        mt={"30px"}
+        mt={"1.875rem"}
       >
-        <Typography fontWeight={500} fontSize={"24px"} lineHeight={"36px"}>
+        <Typography fontWeight={500} fontSize={"1.5rem"} lineHeight={"2.25rem"}>
           Energia Sead
         </Typography>
-        <Typography fontWeight={500} fontSize={"24px"} lineHeight={"36px"}>
+        <Typography fontWeight={500} fontSize={"1.5rem"} lineHeight={"2.25rem"}>
           {periodicity}
         </Typography>
       </Stack>
@@ -204,9 +204,9 @@ export default function ReportDetails() {
           variant="outlined"
           sx={{
             borderColor: "#2C3E50",
-            borderRadius: "40px",
+            borderRadius: "2.5rem",
             color: "#2C3E50",
-            fontSize: "18px",
+            fontSize: "1.125rem",
             fontWeight: 700,
             padding: "20px 60px",
             alignSelf: "end",
