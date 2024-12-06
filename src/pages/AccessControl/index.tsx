@@ -32,7 +32,6 @@ export default function AccessControl() {
     }
 
     const columns: GridColDef<(typeof rows)[number]>[] = [
-        { field: 'id', headerName: 'ID', width: 90 },
         {
           field: 'nome',
           headerName: 'Nome',
@@ -41,7 +40,7 @@ export default function AccessControl() {
         },
         {
           field: 'email',
-          headerName: 'Last name',
+          headerName: 'Email',
           flex: 0.2,
           editable: false,
         },
@@ -65,19 +64,17 @@ export default function AccessControl() {
         }
       ];
       const [searchQuery, SetSearchQuery] = useState<string>('')
-
+      const [currentPage, SetCurrentPage] = useState(1)
+      
       const handleSearch = (query :string) => {
         SetSearchQuery(query)
+        SetCurrentPage(1)
       }
       
       const filteredRows = rows.filter( row =>
         Object.values(row).some(value =>
           String(value).toLowerCase().includes(searchQuery.toLowerCase())
         )
-        // row.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        // row.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        // row.telefone.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        // row.tipoConta.toLowerCase().includes(searchQuery.toLowerCase())
       )
 
     return (
@@ -100,8 +97,13 @@ export default function AccessControl() {
             >
               <SearchBar onSearch={handleSearch}/>
             </Box>
-            <DataTable rows={filteredRows} columns={columns} pageSize={5}
-            
+            <DataTable 
+            rows={filteredRows} 
+            columns={columns} 
+            pageSize={5}
+            checkboxSelection
+            currentPage={currentPage}
+            onSearch={SetCurrentPage}
             />
         </Box>
     )

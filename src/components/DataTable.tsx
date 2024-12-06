@@ -6,6 +6,8 @@ interface CustomDataGridProps<T> {
   rows: T[];
   columns: GridColDef[];
   pageSize: number;
+  currentPage: number;
+  onSearch: (page: number) => void
 }
 
 interface DataTableProps<T>
@@ -16,9 +18,10 @@ export default function DataTable<T>({
   rows,
   columns,
   pageSize,
+  currentPage,
+  onSearch,
   ...dataGridProps
 }: DataTableProps<T>) {
-  const [currentPage, setCurrentPage] = useState(1);
 
   const startIndex = (currentPage - 1) * pageSize;
   const currentRows = rows.slice(startIndex, startIndex + pageSize);
@@ -27,8 +30,9 @@ export default function DataTable<T>({
     event: React.ChangeEvent<unknown>,
     page: number,
   ) => {
-    setCurrentPage(page);
+    onSearch(page);
   };
+
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
