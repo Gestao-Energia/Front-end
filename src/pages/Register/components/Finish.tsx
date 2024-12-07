@@ -13,7 +13,13 @@ export default function FinishUserRegistration() {
   return (
     <Stack direction={"column"} alignItems={"center"} justifyContent={"center"}>
       <img src={finishImage} loading="lazy" />
-      <Typography variant="h5" fontSize={"24px"} fontWeight={"700"} mt={1} mb={2}>
+      <Typography
+        variant="h5"
+        fontSize={"24px"}
+        fontWeight={"700"}
+        mt={1}
+        mb={2}
+      >
         Cadastro concluído
       </Typography>
       <Typography variant="body2" color="#6F6C90" mb={4} maxWidth={495}>
@@ -22,19 +28,19 @@ export default function FinishUserRegistration() {
         o cadastro do usuário
       </Typography>
       <Button
-          variant="contained"
-          sx={{
-            background: "#2C3E50",
-            borderRadius: "40px",
-            color: "#FFF",
-            fontSize: "18px",
-            fontWeight: 700,
-            padding: "20px 60px",
-          }}
-          onClick={handleSubmit}
-        >
-          Enviar
-        </Button>
+        variant="contained"
+        sx={{
+          background: "#2C3E50",
+          borderRadius: "40px",
+          color: "#FFF",
+          fontSize: "18px",
+          fontWeight: 700,
+          padding: "20px 60px",
+        }}
+        onClick={handleSubmit}
+      >
+        Enviar
+      </Button>
     </Stack>
   );
 }
