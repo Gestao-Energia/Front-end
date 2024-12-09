@@ -1,4 +1,5 @@
-import { Box, Container, Grid2, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
+import EditForm from "./components/EditForm";
 import ProfilePicture from "./components/ProfilePicture";
 
 export default function Profile() {
@@ -25,9 +26,10 @@ export default function Profile() {
 
             <ProfilePicture/>
             
-            <Grid2
+            <EditForm/>
+            {/* <Grid2
             container
-            rowSpacing={3}
+            rowSpacing={4}
             >
                 <Grid2 size={12} >
                     <Typography>
@@ -69,8 +71,32 @@ export default function Profile() {
                         Administrador           
                     </Typography>
                 </Grid2>
-            </Grid2>
+            </Grid2> */}
         </Stack>
-            </Stack>
+        <Box 
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          width: '100%',
+          
+        }}
+        >
+
+        <Button
+          variant="outlined"
+          sx={{
+            borderColor: "#2C3E50",
+            borderRadius: "40px",
+            color: "#000000",
+            fontSize: "18px",
+            fontWeight: 700,
+            padding: "20px 60px",
+            
+          }}
+        >
+          Editar
+        </Button>
+        </Box>
+      </Stack>
     )
 }
