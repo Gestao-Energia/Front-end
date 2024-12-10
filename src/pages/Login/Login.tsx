@@ -1,9 +1,20 @@
 import React, { useContext } from "react";
-import { Box, Button, TextField, Typography, Container } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Container,
+  Grid2,
+} from "@mui/material";
 import { useForm, type FieldValues } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertContext } from "../../hooks/useAlert";
+import rionegro from "../../assets/rionegro-login.jpg";
+import logo from "../../assets/logo.png";
+import TextInputDefault from "../../components/TextInputDefault";
+import LogoGoverno from "../../assets/logo-gov-horizontal-contraste 1.png";
 
 const loginSchema = z.object({
   email: z
@@ -54,44 +65,90 @@ const Login: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Grid2
+      container
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        minHeight: "100vh",
+        width: "100vw",
+        // padding: 0,
+        //margin: 0,
+        backgroundColor: "#2C3E50",
+      }}
+    >
       <Box
         sx={{
-          mt: 8,
+          backgroundImage: `url(${rionegro})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          flex: 1,
+          height: "100vh",
+          width: "100%",
+        }}
+      ></Box>
+
+      <Box
+        sx={{
+          // mt: 8,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          flex: 1,
+          padding: 9.125,
+          color: "#fff",
+          gap: 2.5,
         }}
       >
+        <img src={logo} />
         <Typography component="h1" variant="h5">
           Login
         </Typography>
+        <Typography
+          component="h3"
+          variant="body1"
+          sx={{
+            fontWeight: 500,
+            fontSize: "16px",
+            lineHeight: "24px",
+          }}
+        >
+          Insira suas credenciais para acessar sua conta
+        </Typography>
+
         <Box
           component="form"
-          sx={{ mt: 2, width: "100%" }}
+          sx={{
+            mt: 2,
+            width: 415,
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
           noValidate
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <TextField
+          <TextInputDefault
+            label={"Email"}
+            placeholder="Digite o seu Email"
             {...register("email")}
-            margin="normal"
-            fullWidth
-            label="E-mail"
-            type="email"
           />
+
           {errors.email && (
             <Typography variant="body1" sx={{ m: 1 }} color="red">
               {errors?.email?.message}
             </Typography>
           )}
-          <TextField
-            margin="normal"
-            fullWidth
-            label="Senha"
-            type="password"
+          <TextInputDefault
+            label={"Senha"}
+            placeholder="Digite a sua Senha"
             {...register("password")}
           />
+
           {errors.password && (
             <Typography variant="body1" sx={{ m: 1 }} color="red">
               {errors?.password?.message}
@@ -102,13 +159,25 @@ const Login: React.FC = () => {
             fullWidth
             variant="contained"
             disabled={isSubmitting}
-            sx={{ mt: 3 }}
+            sx={{ mt: 5 }}
           >
-            Entrar
+            Login
           </Button>
         </Box>
+        <Box mt={"auto"}>
+          <Typography
+            sx={{
+              fontWeight: 500,
+              fontSize: "64px",
+              // lineHeight: "96px",
+            }}
+          >
+            SEAD
+          </Typography>
+          <img src={LogoGoverno} alt="Logo do Governo do Amazonas" />
+        </Box>
       </Box>
-    </Container>
+    </Grid2>
   );
 };
 
