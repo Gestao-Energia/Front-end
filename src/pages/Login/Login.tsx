@@ -14,7 +14,7 @@ const loginSchema = z.object({
     .string()
     .email("Campo deve conter um e-mail valido")
     .min(1, { message: "ampo e-mail obrigatório" }),
-  password: z.string().min(1, "A senha deve conter pelo menos 5 caracteres"),
+  password: z.string().min(1, "A senha deve conter pelo menos um caracteres"),
 });
 
 type LoginSchema = z.infer<typeof loginSchema>;
