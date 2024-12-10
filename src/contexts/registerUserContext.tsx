@@ -2,10 +2,10 @@ import { createContext, ReactNode } from "react";
 import { SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
 import { z, ZodError } from "zod";
 
-enum Role {
-  Administrator = "Administrador",
-  Manager = "Gestor",
-  Common = "Operador",
+export enum UserRole {
+  Administrator = "ADMIN",
+  Manager = "MANAGER",
+  Common = "COMMON",
 }
 
 export interface FormData {
@@ -13,7 +13,7 @@ export interface FormData {
   email: string;
   contactNumber: string;
   userName: string;
-  role: Role;
+  role: UserRole;
 }
 
 const formSchema = z.object({
@@ -21,7 +21,7 @@ const formSchema = z.object({
   email: z.string().email().min(1, { message: "Campo obrigatório" }),
   contactNumber: z.number().min(1, { message: "Campo obrigatório" }),
   userName: z.string().min(1, { message: "Campo obrigatório" }),
-  role: z.enum([Role.Administrator, Role.Manager, Role.Common]),
+  role: z.enum([UserRole.Administrator, UserRole.Manager, UserRole.Common]),
 });
 
 interface FormContextType {
