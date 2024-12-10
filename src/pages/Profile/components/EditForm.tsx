@@ -1,46 +1,66 @@
-import { Grid2 } from "@mui/material";
+import { Grid2, MenuItem, Select, Typography } from "@mui/material";
 import TextInput from "../../../components/TextInput";
 
 export default function EditForm(){
   return (
-    <Grid2
-    container
-    spacing={2}
-    rowSpacing={4}
-    >
-        <Grid2 size={{ xs:12}} >
+      <Grid2
+      container
+      rowSpacing={4}
+      columnSpacing={12}
+      width={'100%'}
+      sx={{
+        // marginLeft: '2.5rem'
+      }}
+      >
+
+          <Grid2 size={12} >
+            <TextInput
+            label={'Nome'}
+            placeholder="nome"
+            sx={{
+              
+            }}
+            />
+          </Grid2>
+          <Grid2 size={6}>
           <TextInput
-          label={'Nome'}
-          placeholder="nome"
-          sx={{
+            label={'Email'}
+            placeholder="Email"
             
-          }}
-          />
-        </Grid2>
-        <Grid2 size={{xs:12, sm:6}}>
-        <TextInput
-          label={'Email'}
-          placeholder="Email"
-          />
-        </Grid2>
-        <Grid2 size={{xs:12, sm:6}}>
-        <TextInput
-          label={'Numero'}
-          placeholder="Numero"
-          />
-        </Grid2>
-        <Grid2 size={{xs:12, sm:6}}>
-        <TextInput
-          label={'User'}
-          placeholder="User"
-          />
-        </Grid2>
-        <Grid2 size={{xs:12, sm:6}}>
-        <TextInput
-          label={'Tipo de Conta'}
-          placeholder="Tipo de Conta"
-          />
-        </Grid2>
-    </Grid2>
+            />
+          </Grid2>
+          <Grid2 size={6}>
+          <TextInput
+            label={'User'}
+            placeholder="User"
+            />
+          </Grid2>
+          <Grid2 size={6}>
+          <TextInput
+            label={'Numero'}
+            placeholder="Numero"
+            />
+          </Grid2>
+          <Grid2 size={6}>
+            <Typography variant="body1" mb={1}>
+              Tipo de Conta
+            </Typography>
+        <Select
+        variant="standard"
+        disableUnderline
+        sx={{
+          width: '100%',
+          borderRadius: '50px',
+          height: '3.5rem',
+          border: "none",
+          padding: '1rem',
+          boxShadow: "0px 2px 6px 0px #13124212"
+        }}>
+            <MenuItem value={'admin'}> Administrador</MenuItem>
+            <MenuItem value={'mod'}>Moderador</MenuItem>
+            <MenuItem value={'user'}>Usuario</MenuItem>
+        </Select>
+          </Grid2>
+      </Grid2>
   )
 }

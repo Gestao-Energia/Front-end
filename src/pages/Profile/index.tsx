@@ -1,6 +1,33 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
+import { forwardRef } from "react";
 import EditForm from "./components/EditForm";
 import ProfilePicture from "./components/ProfilePicture";
+import StaticProfileInfo from "./components/StaticProfileInfo";
+
+
+const  enum UserInfo{
+  FORM = 'FORM',
+  STATIC = 'STATIC'
+}
+
+const ComponentMapping: Record<UserInfo, React.FC> ={
+  [UserInfo.FORM]: EditForm,
+  [UserInfo.STATIC]: StaticProfileInfo
+}
+
+interface CurrentComponentProps{
+  userInfo: UserInfo
+}
+
+const CurrentComponent = forwardRef<HTMLDivElement, CurrentComponentProps>(({ userInfo }, ref) => {
+  const Component = ComponentMapping[userInfo];
+
+  return (
+    <div ref={ref}>
+      <Component />
+    </div>
+  );
+});
 
 export default function Profile() {
     return (
@@ -21,57 +48,13 @@ export default function Profile() {
             <Stack 
             direction={'row'} 
             justifyContent={'space-between'} 
-            gap={5} 
+            gap={20} 
             width={'100%'}>
 
             <ProfilePicture/>
             
-            <EditForm/>
-            {/* <Grid2
-            container
-            rowSpacing={4}
-            >
-                <Grid2 size={12} >
-                    <Typography>
-                        Nome
-                    </Typography>
-                    <Typography>
-                        Samantha da Silva Vasconcelos                        
-                    </Typography>
-                </Grid2>
-                <Grid2 size={6}>
-                    <Typography>
-                        Email
-                    </Typography>
-                    <Typography>
-                        samantha@gmail.com                        
-                    </Typography>
-                </Grid2>
-                <Grid2 size={6}>
-                    <Typography>
-                        User
-                    </Typography>
-                    <Typography>
-                        samantha01                        
-                    </Typography>
-                </Grid2>
-                <Grid2 size={6}>
-                    <Typography>
-                        Numero
-                    </Typography>
-                    <Typography>
-                        (123) 456 - 7890           
-                    </Typography>
-                </Grid2>
-                <Grid2 size={6}>
-                    <Typography>
-                        Tipo de Conta
-                    </Typography>
-                    <Typography>
-                        Administrador           
-                    </Typography>
-                </Grid2>
-            </Grid2> */}
+            <CurrentComponent userInfo={UserInfo.STATIC} />
+          
         </Stack>
         <Box 
         sx={{
