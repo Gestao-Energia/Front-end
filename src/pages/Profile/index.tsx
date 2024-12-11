@@ -5,28 +5,34 @@ import EditForm from "./components/EditForm";
 import ProfilePicture from "./components/ProfilePicture";
 import StaticProfileInfo from "./components/StaticProfileInfo";
 
-const enum UserInfo {
+const enum PageState {
   FORM = "FORM",
   STATIC = "STATIC",
 }
+export interface UserDataProps {
+  id: number;
+  phone: string;
+  name: string;
+  email: string;
+  role: string;
+}
 
-const ComponentMapping: Record<UserInfo, React.FC<{ userData: object }>> = {
-  [UserInfo.FORM]: EditForm,
-  [UserInfo.STATIC]: StaticProfileInfo,
+const ComponentMapping: Record<PageState, React.FC<UserDataProps>> = {
+  [PageState.FORM]: EditForm,
+  [PageState.STATIC]: StaticProfileInfo,
 };
 
 interface CurrentComponentProps {
-  userInfo: UserInfo;
-  userData: object;
+  pageState: PageState;
 }
 
 const CurrentComponent = forwardRef<HTMLDivElement, CurrentComponentProps>(
-  ({ userInfo, userData }, ref) => {
-    const Component = ComponentMapping[userInfo];
+  ({ pageState }, ref) => {
+    const Component = ComponentMapping[pageState];
 
     return (
       <div ref={ref}>
-        <Component userData={userData} />
+        <Component />
       </div>
     );
   },
@@ -35,13 +41,14 @@ const CurrentComponent = forwardRef<HTMLDivElement, CurrentComponentProps>(
 export default function Profile() {
   const id = useParams();
   const { state } = useLocation();
-  const [isEditing, setIsEditing] = useState<UserInfo>(UserInfo.STATIC);
+  console.log(state);
+  const [isEditing, setIsEditing] = useState<PageState>(PageState.STATIC);
 
   const handleIsEditing = () => {
-    setIsEditing(UserInfo.FORM);
+    setIsEditing(PageState.FORM);
   };
   const handleBack = () => {
-    setIsEditing(UserInfo.STATIC);
+    setIsEditing(PageState.STATIC);
   };
 
   return (
@@ -72,7 +79,7 @@ export default function Profile() {
         sx={{
           display: "flex",
           justifyContent:
-            isEditing == UserInfo.FORM ? "space-between" : "flex-end",
+            isEditing == PageState.FORM ? "space-between" : "flex-end",
           width: "100%",
         }}
       >
@@ -85,8 +92,8 @@ export default function Profile() {
             fontSize: "18px",
             fontWeight: 700,
             padding: "20px 60px",
-            visibility: isEditing == UserInfo.FORM ? "hidden" : "visible",
-            display: isEditing == UserInfo.FORM ? "none" : "block",
+            visibility: isEditing == PageState.FORM ? "hidden" : "visible",
+            display: isEditing == PageState.FORM ? "none" : "block",
           }}
           onClick={handleIsEditing}
         >
@@ -102,8 +109,8 @@ export default function Profile() {
             fontSize: "18px",
             fontWeight: 700,
             padding: "20px 60px",
-            visibility: isEditing == UserInfo.FORM ? "visible" : "hidden",
-            display: isEditing == UserInfo.FORM ? "block" : "none",
+            visibility: isEditing == PageState.FORM ? "visible" : "hidden",
+            display: isEditing == PageState.FORM ? "block" : "none",
           }}
           onClick={handleBack}
         >
@@ -118,8 +125,8 @@ export default function Profile() {
             fontSize: "18px",
             fontWeight: 700,
             padding: "20px 60px",
-            visibility: isEditing == UserInfo.FORM ? "visible" : "hidden",
-            display: isEditing == UserInfo.FORM ? "block" : "none",
+            visibility: isEditing == PageState.FORM ? "visible" : "hidden",
+            display: isEditing == PageState.FORM ? "block" : "none",
           }}
           onClick={handleBack}
         >

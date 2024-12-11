@@ -7,7 +7,11 @@ import {
   Typography,
 } from "@mui/material";
 import TextInput from "../../../components/TextInput";
+import { UserDataProps } from "..";
 
+interface EditFormProps {
+  userData: UserDataProps;
+}
 export default function EditForm() {
   return (
     <FormControl
@@ -26,16 +30,32 @@ export default function EditForm() {
         height={"100%"}
       >
         <Grid2 size={12}>
-          <TextInput label={"Nome"} placeholder="nome" />
+          <TextInput
+            label={"Nome"}
+            placeholder="nome"
+            defaultValue={userData?.name}
+          />
         </Grid2>
         <Grid2 size={6}>
-          <TextInput label={"Email"} placeholder="Email" />
+          <TextInput
+            label={"Email"}
+            placeholder="Email"
+            defaultValue={userData?.email}
+          />
         </Grid2>
         <Grid2 size={6}>
-          <TextInput label={"User"} placeholder="User" />
+          <TextInput
+            label={"User"}
+            placeholder="User"
+            defaultValue={userData?.name}
+          />
         </Grid2>
         <Grid2 size={6}>
-          <TextInput label={"Numero"} placeholder="Numero" />
+          <TextInput
+            label={"Numero"}
+            placeholder="Numero"
+            defaultValue={userData?.phone}
+          />
         </Grid2>
         <Grid2 size={6}>
           <Typography variant="body1" mb={1}>
@@ -44,6 +64,7 @@ export default function EditForm() {
           <Select
             variant="standard"
             disableUnderline
+            defaultValue={userData.role}
             sx={{
               width: "100%",
               borderRadius: "50px",
@@ -53,9 +74,9 @@ export default function EditForm() {
               boxShadow: "0px 2px 6px 0px #13124212",
             }}
           >
-            <MenuItem value={"admin"}> Administrador</MenuItem>
-            <MenuItem value={"mod"}>Moderador</MenuItem>
-            <MenuItem value={"user"}>Usuario</MenuItem>
+            <MenuItem value={"administrador"}> Administrador</MenuItem>
+            <MenuItem value={"moderador"}>Moderador</MenuItem>
+            <MenuItem value={"usuario"}>Usuario</MenuItem>
           </Select>
         </Grid2>
       </Grid2>

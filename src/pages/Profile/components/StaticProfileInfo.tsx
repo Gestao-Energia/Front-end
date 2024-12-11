@@ -1,13 +1,11 @@
 import { Grid2, Typography } from "@mui/material";
+import { UserDataProps } from "..";
 
-interface User {
-  id: number;
-  telefone: string;
-  nome: string;
-  email: string;
-  tipoConta: string;
+interface StaticProfileInfoProps {
+  userData: UserDataProps;
 }
-export default function StaticProfileInfo({ userData }) {
+
+export default function StaticProfileInfo() {
   return (
     <Grid2
       container
@@ -17,24 +15,24 @@ export default function StaticProfileInfo({ userData }) {
       height={"100%"}
     >
       <Grid2 size={12}>
-        <Typography>Nome : {userData.nome}</Typography>
-        <Typography>Samantha da Silva Vasconcelos</Typography>
+        <Typography>Nome </Typography>
+        <Typography>{userData?.name}</Typography>
       </Grid2>
       <Grid2 size={6}>
         <Typography>Email</Typography>
-        <Typography>samantha@gmail.com</Typography>
+        <Typography>{userData?.email}</Typography>
       </Grid2>
       <Grid2 size={6}>
         <Typography>User</Typography>
-        <Typography>samantha01</Typography>
+        <Typography>{userData?.name}</Typography>
       </Grid2>
       <Grid2 size={6}>
         <Typography>Numero</Typography>
-        <Typography>(123) 456 - 7890</Typography>
+        <Typography>{userData?.phone}</Typography>
       </Grid2>
       <Grid2 size={6}>
         <Typography>Tipo de Conta</Typography>
-        <Typography>Administrador</Typography>
+        <Typography>{userData?.role}</Typography>
       </Grid2>
     </Grid2>
   );
