@@ -1,12 +1,7 @@
 import { createContext, ReactNode } from "react";
 import { SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
 import { z, ZodError } from "zod";
-
-export enum UserRole {
-  Administrator = "ADMIN",
-  Manager = "MANAGER",
-  Common = "COMMON",
-}
+import { UserRole } from "./authContext";
 
 export interface FormData {
   name: string;

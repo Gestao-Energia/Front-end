@@ -1,5 +1,4 @@
 import { createContext, ReactNode, useState, useCallback } from "react";
-import { UserRole } from "./registerUserContext";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "../services/AuthService";
 import { StorageService } from "../services/StorageService";
@@ -13,6 +12,13 @@ export interface User {
   role: UserRole;
   profileImageUrl: string;
 }
+
+export enum UserRole {
+  Administrator = "ADMIN",
+  Manager = "MANAGER",
+  Common = "COMMON",
+}
+
 type LoginRequestBody = {
   email: string;
   password: string;
