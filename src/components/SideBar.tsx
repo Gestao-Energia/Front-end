@@ -58,7 +58,7 @@ export default function SideBar() {
       >
         {navOptions.map((option) => (
           <NavLink
-          key={option.route}
+            key={option.route}
             to={option.route}
             style={({ isActive }) => {
               return {

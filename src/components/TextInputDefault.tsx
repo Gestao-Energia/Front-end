@@ -10,13 +10,13 @@ type TextInputProps = {
   placeholder: string;
 } & OutlinedInputProps;
 
-export default function TextInput({
+export default function TextInputDefault({
   label,
   placeholder,
   ...props
 }: TextInputProps) {
   return (
-    <Box textAlign={"left"} width={"100%"}>
+    <Box textAlign={"center"} width={"100%"}>
       <Typography variant="body1" mb={1}>
         {label}
       </Typography>
@@ -24,8 +24,8 @@ export default function TextInput({
         {...props}
         placeholder={placeholder}
         sx={{
-          borderRadius: "46px",
-          boxShadow: "0px 2px 6px 0px #13124212",
+          borderRadius: "10px",
+          background: "#FFF",
           border: "none !important",
           width: "100%",
           "& fieldset": { border: "none" },
