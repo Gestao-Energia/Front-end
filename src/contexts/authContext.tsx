@@ -1,8 +1,5 @@
-import { createContext, ReactNode, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import { AuthService } from "../services/AuthService";
+import { createContext, ReactNode, useState } from "react";
 import { StorageService } from "../services/StorageService";
-import { useAlert } from "../hooks/useAlert";
 
 export interface User {
   name: string;
@@ -13,24 +10,19 @@ export interface User {
   profileImageUrl: string;
 }
 
+export interface UserWithToken extends User {
+  token: string;
+}
+
 export enum UserRole {
   Administrator = "ADMIN",
   Manager = "MANAGER",
   Common = "COMMON",
 }
-
-type LoginRequestBody = {
-  email: string;
-  password: string;
-};
-
 interface AuthContextType {
-  loginAction: (data: LoginRequestBody) => Promise<void>;
-  logoutAction: () => void;
-  user: User | null;
+  registerCurrentUser: (data: User) => void;
+  currentUser: User | null;
   token: string | null;
-  loading: boolean;
-  error: string | null;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -38,50 +30,19 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 );
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const navigate = useNavigate();
-  const { showAlert } = useAlert();
-  const { loginUser, loading, error } = AuthService();
-  const { token, saveToken, removeToken } = StorageService();
-  const [user, setUser] = useState<User | null>(null);
+  const { token } = StorageService();
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  const loginAction = useCallback(
-    async (data: LoginRequestBody) => {
-      const response = await loginUser(data);
-      if (response) {
-        setUser(response.user);
-        await saveToken(response.token);
-        showAlert({
-          title: "Sucesso",
-          message: "Login realisado com sucesso",
-          severity: "success",
-        });
-        navigate("/dashboard");
-      } else {
-        showAlert({
-          title: "Erro",
-          message: "Erro ao tentar realizar o login",
-          severity: "error",
-        });
-      }
-    },
-    [loginUser, navigate, saveToken],
-  );
-
-  const logoutAction = useCallback(() => {
-    setUser(null);
-    removeToken();
-    navigate("/login");
-  }, [removeToken, navigate]);
+  const registerCurrentUser = (user: User) => {
+    setCurrentUser(user);
+  };
 
   return (
     <AuthContext.Provider
       value={{
-        loginAction,
-        logoutAction,
-        user,
+        registerCurrentUser,
+        currentUser,
         token,
-        loading,
-        error,
       }}
     >
       {children}
