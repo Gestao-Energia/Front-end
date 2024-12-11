@@ -1,5 +1,6 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { forwardRef, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import EditForm from "./components/EditForm";
 import ProfilePicture from "./components/ProfilePicture";
 import StaticProfileInfo from "./components/StaticProfileInfo";
@@ -9,28 +10,31 @@ const enum UserInfo {
   STATIC = "STATIC",
 }
 
-const ComponentMapping: Record<UserInfo, React.FC> = {
+const ComponentMapping: Record<UserInfo, React.FC<{ userData: object }>> = {
   [UserInfo.FORM]: EditForm,
   [UserInfo.STATIC]: StaticProfileInfo,
 };
 
 interface CurrentComponentProps {
   userInfo: UserInfo;
+  userData: object;
 }
 
 const CurrentComponent = forwardRef<HTMLDivElement, CurrentComponentProps>(
-  ({ userInfo }, ref) => {
+  ({ userInfo, userData }, ref) => {
     const Component = ComponentMapping[userInfo];
 
     return (
       <div ref={ref}>
-        <Component />
+        <Component userData={userData} />
       </div>
     );
   },
 );
 
 export default function Profile() {
+  const id = useParams();
+  const { state } = useLocation();
   const [isEditing, setIsEditing] = useState<UserInfo>(UserInfo.STATIC);
 
   const handleIsEditing = () => {
@@ -62,7 +66,7 @@ export default function Profile() {
           <ProfilePicture />
         </Stack>
 
-        <CurrentComponent userInfo={isEditing} />
+        <CurrentComponent userInfo={isEditing} userData={state} />
       </Stack>
       <Box
         sx={{

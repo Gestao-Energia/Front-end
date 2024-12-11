@@ -1,13 +1,13 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import DefaultLayout from "../layout/DefautltLayout";
-import Profile from "../pages/Profile";
-import Dashboard from "../pages/Dashboard";
-import Register from "../pages/Register";
-import AccessControl from "../pages/AccessControl";
-import Report from "../pages/Report";
-import Monitoring from "../pages/Monitoring";
-import Login from "../pages/Login/Login";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { RegisterUserFormProvider } from "../contexts/registerUserContext";
+import DefaultLayout from "../layout/DefautltLayout";
+import AccessControl from "../pages/AccessControl";
+import Dashboard from "../pages/Dashboard";
+import Login from "../pages/Login/Login";
+import Monitoring from "../pages/Monitoring";
+import Profile from "../pages/Profile";
+import Register from "../pages/Register";
+import Report from "../pages/Report";
 import ReportDetails from "../pages/ReportDetails";
 
 export default function Router() {
@@ -25,6 +25,7 @@ export default function Router() {
           }
         />
         <Route path="/accessControl" element={<AccessControl />} />
+        <Route path="/accessControl/profile/:id" element={<Profile />} />
         <Route path="/report" element={<Report />} />
         <Route path="/report/:reportId" element={<ReportDetails />} />
         <Route path="/monitoring" element={<Monitoring />} />
