@@ -14,6 +14,7 @@ module.exports = [
     },
     rules: {
       "prettier/prettier": "error",
+      "linebreak-style": ["error", "unix"],
       semi: ["warn", "always"],
     },
   },
@@ -30,6 +31,7 @@ module.exports = [
     },
     rules: {
       "prettier/prettier": "error",
+      "linebreak-style": ["error", "unix"], // Ensure LF line endings
       semi: ["warn", "always"],
       "@typescript-eslint/no-unused-vars": ["warn"],
     },

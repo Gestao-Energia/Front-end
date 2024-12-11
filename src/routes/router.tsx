@@ -8,26 +8,30 @@ import Report from "../pages/Report";
 import Monitoring from "../pages/Monitoring";
 import Login from "../pages/Login/Login";
 import { RegisterUserFormProvider } from "../contexts/registerUserContext";
+import PrivateRoute from "./PrivateRoute";
 
 export default function Router() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" />} />
-      <Route path="/" element={<DefaultLayout />}>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route
-          path="/register"
-          element={
-            <RegisterUserFormProvider>
-              <Register />
-            </RegisterUserFormProvider>
-          }
-        />
-        <Route path="/accessControl" element={<AccessControl />} />
-        <Route path="/report" element={<Report />} />
-        <Route path="/monitoring" element={<Monitoring />} />
-        <Route path="/profile" element={<Profile />} />
+      <Route element={<PrivateRoute />}>
+        <Route path="/" element={<Navigate to="/dashboard" />} />
+        <Route path="/" element={<DefaultLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/register"
+            element={
+              <RegisterUserFormProvider>
+                <Register />
+              </RegisterUserFormProvider>
+            }
+          />
+          <Route path="/accessControl" element={<AccessControl />} />
+          <Route path="/report" element={<Report />} />
+          <Route path="/monitoring" element={<Monitoring />} />
+          <Route path="/profile" element={<Profile />} />
+        </Route>
       </Route>
+
       <Route path="/login" element={<Login />} />
     </Routes>
   );

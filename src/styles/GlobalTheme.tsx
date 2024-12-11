@@ -22,6 +22,12 @@ export const theme = createTheme({
           borderRadius: "8px",
           textTransform: "none",
           fontSize: "1.4rem",
+          "&.Mui-disabled": {
+            opacity: 0.7,
+            cursor: "not-allowed",
+            color: "#FFF",
+          },
+          "&.Mui-disabled:hover": { cursor: "not-allowed" },
         },
       },
     },

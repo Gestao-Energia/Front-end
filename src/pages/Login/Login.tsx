@@ -1,59 +1,83 @@
-import React, { useContext } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  Container,
-  Grid2,
-} from "@mui/material";
-import { useForm, type FieldValues } from "react-hook-form";
+import React from "react";
+import { Box, Button, Typography, Grid2 } from "@mui/material";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertContext } from "../../hooks/useAlert";
 import rionegro from "../../assets/rionegro-login.jpg";
 import logo from "../../assets/logo.png";
 import TextInputDefault from "../../components/TextInputDefault";
 import LogoGoverno from "../../assets/logo-gov-horizontal-contraste 1.png";
+import { useAuth } from "../../hooks/useAuth";
+import { useLogin } from "../../queries/useLogin";
+import { StorageService } from "../../services/StorageService";
+import { useAlert } from "../../hooks/useAlert";
+import { useNavigate } from "react-router-dom";
+import { UserWithToken } from "../../contexts/authContext";
 
 const loginSchema = z.object({
   email: z
     .string()
     .email("Campo deve conter um e-mail valido")
     .min(1, { message: "ampo e-mail obrigatório" }),
-  password: z.string().min(5, "A senha deve conter pelo menos 5 caracteres"),
+  password: z.string().min(1, "A senha deve conter pelo menos um caracteres"),
 });
 
 type LoginSchema = z.infer<typeof loginSchema>;
 
 const Login: React.FC = () => {
-  const { showAlert } = useContext(AlertContext);
+  const auth = useAuth();
+  const { mutateAsync: login, isPending } = useLogin();
+  const navigate = useNavigate();
+  const { showAlert } = useAlert();
+  const { saveToken } = StorageService();
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = async (data: LoginSchema) => {
-    const response = await fetch("/api/login", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
+  const onSubmit = (data: LoginSchema) => {
+    login(data, {
+      onSuccess: async (response) => {
+        if (!response?.data) {
+          showAlert({
+            title: "Erro",
+            message: "Dados de resposta inválidos",
+            severity: "error",
+          });
+          return;
+        }
+
+        await handleLoginSuccess(response.data);
+      },
+      onError: (err) => {
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : "Erro ao tentar realizar o login";
+        showAlert({
+          title: "Erro",
+          message: errorMessage,
+          severity: "error",
+        });
       },
     });
+  };
 
-    if (!response.ok) {
-      showAlert({
-        title: "Erro",
-        message: "ocorreu um erro ao fazer o login",
-        severity: "error",
-      });
-    }
+  const handleLoginSuccess = async (userData: UserWithToken) => {
+    auth?.registerCurrentUser({
+      name: userData.name,
+      email: userData.email,
+      username: userData.username,
+      role: userData.role,
+      telephone: userData.telephone,
+      profileImageUrl: userData.profileImageUrl,
+    });
+
+    await saveToken(userData.token);
 
     showAlert({
       title: "Sucesso",
@@ -61,7 +85,7 @@ const Login: React.FC = () => {
       severity: "success",
     });
 
-    reset();
+    navigate("/dashboard");
   };
 
   return (
@@ -74,8 +98,6 @@ const Login: React.FC = () => {
         flexDirection: "row",
         minHeight: "100vh",
         width: "100vw",
-        // padding: 0,
-        //margin: 0,
         backgroundColor: "#2C3E50",
       }}
     >
@@ -93,7 +115,6 @@ const Login: React.FC = () => {
 
       <Box
         sx={{
-          // mt: 8,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -132,33 +153,54 @@ const Login: React.FC = () => {
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <TextInputDefault
-            label={"Email"}
-            placeholder="Digite o seu Email"
-            {...register("email")}
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <>
+                <TextInputDefault
+                  label={"Email"}
+                  placeholder="Digite o seu Email"
+                  value={field.value ?? ""}
+                  onChange={(e) => field.onChange(e.target.value)}
+                />
+
+                {errors.email && (
+                  <Typography variant="body1" sx={{ m: 1 }} color="red">
+                    {errors?.email?.message}
+                  </Typography>
+                )}
+              </>
+            )}
           />
 
-          {errors.email && (
-            <Typography variant="body1" sx={{ m: 1 }} color="red">
-              {errors?.email?.message}
-            </Typography>
-          )}
-          <TextInputDefault
-            label={"Senha"}
-            placeholder="Digite a sua Senha"
-            {...register("password")}
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <>
+                <TextInputDefault
+                  label={"Senha"}
+                  placeholder="Digite a sua Senha"
+                  value={field.value ?? ""}
+                  type="password"
+                  onChange={(e) => field.onChange(e.target.value)}
+                />
+
+                {errors.password && (
+                  <Typography variant="body1" sx={{ m: 1 }} color="red">
+                    {errors?.password?.message}
+                  </Typography>
+                )}
+              </>
+            )}
           />
 
-          {errors.password && (
-            <Typography variant="body1" sx={{ m: 1 }} color="red">
-              {errors?.password?.message}
-            </Typography>
-          )}
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isPending}
             sx={{ mt: 5 }}
           >
             Login
@@ -169,7 +211,6 @@ const Login: React.FC = () => {
             sx={{
               fontWeight: 500,
               fontSize: "64px",
-              // lineHeight: "96px",
             }}
           >
             SEAD
