@@ -7,7 +7,8 @@ export interface User {
   telephone: string;
   username: string;
   role: UserRole;
-  profileImageUrl: string;
+  profileImageUrl?: string | null;
+  password?: string | null;
 }
 
 export interface UserWithToken extends User {

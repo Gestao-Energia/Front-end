@@ -76,8 +76,8 @@ export default function Register() {
   const formFields: (keyof FormData)[] = [
     "name",
     "email",
-    "contactNumber",
-    "userName",
+    "telephone",
+    "username",
   ];
   const roleField: (keyof FormData)[] = ["role"];
 
@@ -87,6 +87,19 @@ export default function Register() {
     const result = await form.trigger(fieldsToValidate, { shouldFocus: true });
     if (result) {
       changeStep();
+    }
+  };
+
+  const handlePrevStep = async () => {
+    switch (activeStep) {
+      case ActiveSteps.FINISH:
+        setActiveStep(ActiveSteps.PERMISSIONS);
+        break;
+      case ActiveSteps.PERMISSIONS:
+        setActiveStep(ActiveSteps.FORM);
+        break;
+      default:
+        break;
     }
   };
 
@@ -162,7 +175,7 @@ export default function Register() {
             padding: "20px 60px",
             visibility: activeStep === ActiveSteps.FORM ? "hidden" : "block",
           }}
-          onClick={() => setActiveStep(ActiveSteps.FORM)}
+          onClick={handlePrevStep}
         >
           Voltar
         </Button>
