@@ -10,10 +10,10 @@ import {
   Stepper,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { forwardRef, useState } from "react";
 import RegisterUserForm from "./components/Form";
 import RegisterUserPermissions from "./components/Permissions";
-import styled from "styled-components";
 import FinishUserRegistration from "./components/Finish";
 import { useRegisterUserFormContext } from "../../hooks/useRegisterUserFormContext";
 import { FormData } from "../../contexts/registerUserContext";
