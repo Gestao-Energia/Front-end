@@ -94,7 +94,11 @@ export default function RegisterUserPermissions() {
             </>
           )}
         />
-        {form.formState.errors.role && <Typography variant="body1" sx={{ m: 1 }} color="red">{form.formState.errors.role.message}</Typography>}
+        {form.formState.errors.role && (
+          <Typography variant="body1" sx={{ m: 1 }} color="red">
+            {form.formState.errors.role.message}
+          </Typography>
+        )}
       </Box>
     </>
   );

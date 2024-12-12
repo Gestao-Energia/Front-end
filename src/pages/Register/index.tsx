@@ -57,30 +57,36 @@ interface CurrentComponentProps {
   activeStep: ActiveSteps;
 }
 
-const CurrentComponent = forwardRef<HTMLDivElement, CurrentComponentProps>(({ activeStep }, ref) => {
-  const Component = ComponentMapping[activeStep];
+const CurrentComponent = forwardRef<HTMLDivElement, CurrentComponentProps>(
+  ({ activeStep }, ref) => {
+    const Component = ComponentMapping[activeStep];
 
-  return (
-    <div ref={ref}>
-      <Component />
-    </div>
-  );
-});
+    return (
+      <div ref={ref}>
+        <Component />
+      </div>
+    );
+  },
+);
 
 export default function Register() {
   const [activeStep, setActiveStep] = useState<ActiveSteps>(ActiveSteps.FORM);
   const { form } = useRegisterUserFormContext();
   const steps = Object.values(ActiveSteps);
-  const formFields: (keyof FormData)[] = ['name', 'email', 'contactNumber', 'userName'];
-  const roleField: (keyof FormData)[] = ['role'];
+  const formFields: (keyof FormData)[] = [
+    "name",
+    "email",
+    "contactNumber",
+    "userName",
+  ];
+  const roleField: (keyof FormData)[] = ["role"];
 
   const handleNextStep = async () => {
-    const fieldsToValidate = activeStep === ActiveSteps.FORM
-    ? formFields
-    : roleField;
+    const fieldsToValidate =
+      activeStep === ActiveSteps.FORM ? formFields : roleField;
     const result = await form.trigger(fieldsToValidate, { shouldFocus: true });
     if (result) {
-      changeStep()
+      changeStep();
     }
   };
 
@@ -95,7 +101,7 @@ export default function Register() {
       default:
         break;
     }
-  }
+  };
 
   return (
     <Stack alignItems={"center"} sx={{ textAlign: "center" }} gap={2}>

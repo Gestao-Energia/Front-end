@@ -1,3 +1,3 @@
 export default function Monitoring() {
-    return <h1>Monitoring Page</h1>
+  return <h1>Monitoring Page</h1>;
 }

@@ -37,7 +37,7 @@ export default function RegisterUserForm() {
                     placeholder="John Carter"
                     label="Nome"
                     fullWidth
-                    value={field.value ?? ''}
+                    value={field.value ?? ""}
                     onChange={(e) => field.onChange(e.target.value)}
                   />
                   {form.formState.errors.name && (
@@ -64,7 +64,7 @@ export default function RegisterUserForm() {
                     placeholder="Email"
                     label="Email"
                     fullWidth
-                    value={field.value ?? ''}
+                    value={field.value ?? ""}
                     onChange={(e) => field.onChange(e.target.value)}
                   />
                   {form.formState.errors.email && (
@@ -91,9 +91,9 @@ export default function RegisterUserForm() {
                   <TextInput
                     placeholder="(123) 456 - 7890"
                     label="Número"
-                    type={'number'}
+                    type={"number"}
                     fullWidth
-                    value={field.value ?? ''}
+                    value={field.value ?? ""}
                     onChange={(e) => field.onChange(e.target.value)}
                   />
                   {form.formState.errors.contactNumber && (
@@ -121,7 +121,7 @@ export default function RegisterUserForm() {
                     placeholder="johncarter"
                     label="Usuário"
                     fullWidth
-                    value={field.value ?? ''}
+                    value={field.value ?? ""}
                     onChange={(e) => field.onChange(e.target.value)}
                   />
                   {form.formState.errors.userName && (

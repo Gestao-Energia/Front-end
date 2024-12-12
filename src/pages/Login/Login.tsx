@@ -1,119 +1,224 @@
-import React, { useContext } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  Container,
-} from "@mui/material";
-import { useForm, type FieldValues } from "react-hook-form";
+import React from "react";
+import { Box, Button, Typography, Grid2 } from "@mui/material";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertContext } from "../../hooks/useAlert";
+import rionegro from "../../assets/rionegro-login.jpg";
+import logo from "../../assets/logo.png";
+import TextInputDefault from "../../components/TextInputDefault";
+import LogoGoverno from "../../assets/logo-gov-horizontal-contraste 1.png";
+import { useAuth } from "../../hooks/useAuth";
+import { useLogin } from "../../queries/useLogin";
+import { StorageService } from "../../services/StorageService";
+import { useAlert } from "../../hooks/useAlert";
+import { useNavigate } from "react-router-dom";
+import { UserWithToken } from "../../contexts/authContext";
 
 const loginSchema = z.object({
-  email: z.string().email("Campo deve conter um e-mail valido").min(1, { message: 'ampo e-mail obrigatório' }),
-  password: z.string().min(5, 'A senha deve conter pelo menos 5 caracteres')
-})
+  email: z
+    .string()
+    .email("Campo deve conter um e-mail valido")
+    .min(1, { message: "ampo e-mail obrigatório" }),
+  password: z.string().min(1, "A senha deve conter pelo menos um caracteres"),
+});
 
-type LoginSchema = z.infer<typeof loginSchema>
+type LoginSchema = z.infer<typeof loginSchema>;
 
 const Login: React.FC = () => {
-  const { showAlert } = useContext(AlertContext);
+  const auth = useAuth();
+  const { mutateAsync: login, isPending } = useLogin();
+  const navigate = useNavigate();
+  const { showAlert } = useAlert();
+  const { saveToken } = StorageService();
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
   } = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema)
+    resolver: zodResolver(loginSchema),
   });
 
+  const onSubmit = (data: LoginSchema) => {
+    login(data, {
+      onSuccess: async (response) => {
+        if (!response?.data) {
+          showAlert({
+            title: "Erro",
+            message: "Dados de resposta inválidos",
+            severity: "error",
+          });
+          return;
+        }
 
-  const onSubmit = async  (data: LoginSchema) => {
-    const response = await fetch("/api/login", {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-
-    if (!response.ok) {
-      showAlert({
-        title: 'Erro',
-        message: 'ocorreu um erro ao fazer o login',
-        severity: 'error',
-      });
-    }
-
-    showAlert({
-      title: 'Sucesso',
-      message: 'Login realizado com sucesso',
-      severity: 'success',
+        await handleLoginSuccess(response.data);
+      },
+      onError: (err) => {
+        const errorMessage =
+          err instanceof Error
+            ? err.message
+            : "Erro ao tentar realizar o login";
+        showAlert({
+          title: "Erro",
+          message: errorMessage,
+          severity: "error",
+        });
+      },
     });
-
-    reset();
   };
 
+  const handleLoginSuccess = async (userData: UserWithToken) => {
+    auth?.registerCurrentUser({
+      name: userData.name,
+      email: userData.email,
+      username: userData.username,
+      role: userData.role,
+      telephone: userData.telephone,
+      profileImageUrl: userData.profileImageUrl,
+    });
+
+    await saveToken(userData.token);
+
+    showAlert({
+      title: "Sucesso",
+      message: "Login realizado com sucesso",
+      severity: "success",
+    });
+
+    navigate("/dashboard");
+  };
 
   return (
-    <Container maxWidth="sm">
+    <Grid2
+      container
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        minHeight: "100vh",
+        width: "100vw",
+        backgroundColor: "#2C3E50",
+      }}
+    >
       <Box
         sx={{
-          mt: 8,
+          backgroundImage: `url(${rionegro})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          flex: 1,
+          height: "100vh",
+          width: "100%",
+        }}
+      ></Box>
+
+      <Box
+        sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          flex: 1,
+          padding: 9.125,
+          color: "#fff",
+          gap: 2.5,
         }}
       >
+        <img src={logo} />
         <Typography component="h1" variant="h5">
           Login
         </Typography>
+        <Typography
+          component="h3"
+          variant="body1"
+          sx={{
+            fontWeight: 500,
+            fontSize: "16px",
+            lineHeight: "24px",
+          }}
+        >
+          Insira suas credenciais para acessar sua conta
+        </Typography>
+
         <Box
           component="form"
-          sx={{ mt: 2, width: "100%" }}
+          sx={{
+            mt: 2,
+            width: 415,
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
           noValidate
           autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <TextField
-            {...register('email')}
-            margin="normal"
-            fullWidth
-            label="E-mail"
-            type="email"
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <>
+                <TextInputDefault
+                  label={"Email"}
+                  placeholder="Digite o seu Email"
+                  value={field.value ?? ""}
+                  onChange={(e) => field.onChange(e.target.value)}
+                />
+
+                {errors.email && (
+                  <Typography variant="body1" sx={{ m: 1 }} color="red">
+                    {errors?.email?.message}
+                  </Typography>
+                )}
+              </>
+            )}
           />
-          {errors.email && (
-            <Typography variant="body1" sx={{ m: 1 }} color="red">
-              {errors?.email?.message}
-            </Typography>
-          )}
-          <TextField
-            margin="normal"
-            fullWidth
-            label="Senha"
-            type="password"
-            {...register('password')}
+
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <>
+                <TextInputDefault
+                  label={"Senha"}
+                  placeholder="Digite a sua Senha"
+                  value={field.value ?? ""}
+                  type="password"
+                  onChange={(e) => field.onChange(e.target.value)}
+                />
+
+                {errors.password && (
+                  <Typography variant="body1" sx={{ m: 1 }} color="red">
+                    {errors?.password?.message}
+                  </Typography>
+                )}
+              </>
+            )}
           />
-          {errors.password && (
-            <Typography variant="body1" sx={{ m: 1 }} color="red">
-              {errors?.password?.message}
-            </Typography>
-          )}
+
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            disabled={isSubmitting}
-            sx={{ mt: 3 }}
+            disabled={isSubmitting || isPending}
+            sx={{ mt: 5 }}
           >
-            Entrar
+            Login
           </Button>
         </Box>
+        <Box mt={"auto"}>
+          <Typography
+            sx={{
+              fontWeight: 500,
+              fontSize: "64px",
+            }}
+          >
+            SEAD
+          </Typography>
+          <img src={LogoGoverno} alt="Logo do Governo do Amazonas" />
+        </Box>
       </Box>
-    </Container>
+    </Grid2>
   );
 };
 
