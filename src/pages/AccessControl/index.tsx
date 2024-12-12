@@ -60,10 +60,8 @@ export default function AccessControl() {
   };
 
   const handleRowClick: GridEventListener<"rowClick"> = (params) => {
-    const user = rows.find((row) => row.id === params.id);
-    navigate(`/accessControl/profile/${params.id}`, { state: user });
+    navigate(`/accessControl/profile/${params.id}`);
   };
-
   return (
     <Box
       sx={{
@@ -76,6 +74,7 @@ export default function AccessControl() {
         backgroundColor: "#F8F8F8",
       }}
     >
+      <></>
       <Box
         sx={{
           backgroundColor: "#E5EDF8",

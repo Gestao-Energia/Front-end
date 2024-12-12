@@ -1,6 +1,5 @@
 import { Box, Pagination } from "@mui/material";
-import { DataGrid, GridColDef, DataGridProps } from "@mui/x-data-grid";
-import { useState } from "react";
+import { DataGrid, DataGridProps, GridColDef } from "@mui/x-data-grid";
 
 interface CustomDataGridProps<T> {
   rows: T[];
