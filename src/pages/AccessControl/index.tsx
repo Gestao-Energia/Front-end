@@ -1,94 +1,27 @@
 import { Box } from "@mui/material";
 import { GridColDef, GridEventListener } from "@mui/x-data-grid";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import DataTable from "../../components/DataTable";
 import SearchBar from "../../components/SearchBar";
+import { useListAllUsers } from "../../queries/useListAllUsersPaginated";
 
-interface Row {
-  id: number;
-  telefone: string;
-  nome: string;
-  email: string;
-  tipoConta: string;
-}
 export default function AccessControl() {
   const navigate = useNavigate();
-
-  const rows: Row[] = [
-    {
-      id: 1,
-      telefone: "11987654321",
-      nome: "Jon Snow",
-      email: "jon.snow@wall.com",
-      tipoConta: "administrador",
-    },
-    {
-      id: 2,
-      telefone: "11923456789",
-      nome: "Cersei Lannister",
-      email: "cersei.lannister@lannister.com",
-      tipoConta: "usuario",
-    },
-    {
-      id: 3,
-      telefone: "11976543210",
-      nome: "Jaime Lannister",
-      email: "jaime.lannister@lannister.com",
-      tipoConta: "moderador",
-    },
-    {
-      id: 4,
-      telefone: "11987651234",
-      nome: "Arya Stark",
-      email: "arya.stark@stark.com",
-      tipoConta: "usuario",
-    },
-    {
-      id: 5,
-      telefone: "11998765432",
-      nome: "Daenerys Targaryen",
-      email: "daenerys@targaryen.com",
-      tipoConta: "administrador",
-    },
-    {
-      id: 6,
-      telefone: "11987654321",
-      nome: "Melisandre",
-      email: "melisandre@redgod.com",
-      tipoConta: "moderador",
-    },
-    {
-      id: 7,
-      telefone: "11998765123",
-      nome: "Ferrara Clifford",
-      email: "clifford@france.com",
-      tipoConta: "usuario",
-    },
-    {
-      id: 8,
-      telefone: "11999998888",
-      nome: "Rossini Frances",
-      email: "rossini@italy.com",
-      tipoConta: "usuario",
-    },
-    {
-      id: 9,
-      telefone: "11912345678",
-      nome: "Harvey Roxie",
-      email: "roxie@legal.com",
-      tipoConta: "moderador",
-    },
-  ];
+  const [searchParams] = useSearchParams();
+  const listAllUserQuery = useListAllUsers({
+    page: searchParams.get("page") ?? "0",
+    size: searchParams.get("size") ?? "10",
+  });
 
   function formatarTelefone(telefone: string) {
     const cleanedPhoneNumber = telefone.replace(/\D/g, "");
     return `(${cleanedPhoneNumber.slice(0, 2)}) ${cleanedPhoneNumber.slice(2, 7)}-${cleanedPhoneNumber.slice(7)}`;
   }
 
-  const columns: GridColDef<(typeof rows)[number]>[] = [
+  const columns: GridColDef[] = [
     {
-      field: "nome",
+      field: "name",
       headerName: "Nome",
       flex: 0.2,
       editable: false,
@@ -100,7 +33,7 @@ export default function AccessControl() {
       editable: false,
     },
     {
-      field: "telefone",
+      field: "telephone",
       headerName: "Telefone",
       type: "string",
       flex: 0.2,
@@ -111,7 +44,7 @@ export default function AccessControl() {
       },
     },
     {
-      field: "tipoConta",
+      field: "role",
       headerName: "Tipo de Conta",
       type: "string",
       flex: 0.2,
@@ -125,12 +58,6 @@ export default function AccessControl() {
     SetSearchQuery(query);
     SetCurrentPage(1);
   };
-
-  const filteredRows = rows.filter((row) =>
-    Object.values(row).some((value) =>
-      String(value).toLowerCase().includes(searchQuery.toLowerCase()),
-    ),
-  );
 
   const handleRowClick: GridEventListener<"rowClick"> = (params) => {
     const user = rows.find((row) => row.id === params.id);
@@ -159,9 +86,11 @@ export default function AccessControl() {
         <SearchBar onSearch={handleSearch} />
       </Box>
       <DataTable
-        rows={filteredRows}
+        loading={listAllUserQuery.isPending}
+        rows={listAllUserQuery?.data?.data ?? []}
         columns={columns}
         pageSize={5}
+        getRowId={(row) => row.username}
         checkboxSelection
         currentPage={currentPage}
         onSearch={SetCurrentPage}

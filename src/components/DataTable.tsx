@@ -7,7 +7,7 @@ interface CustomDataGridProps<T> {
   columns: GridColDef[];
   pageSize: number;
   currentPage: number;
-  onSearch: (page: number) => void
+  onSearch: (page: number) => void;
 }
 
 interface DataTableProps<T>
@@ -22,7 +22,6 @@ export default function DataTable<T>({
   onSearch,
   ...dataGridProps
 }: DataTableProps<T>) {
-
   const startIndex = (currentPage - 1) * pageSize;
   const currentRows = rows.slice(startIndex, startIndex + pageSize);
 
@@ -32,7 +31,6 @@ export default function DataTable<T>({
   ) => {
     onSearch(page);
   };
-
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
