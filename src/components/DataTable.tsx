@@ -1,12 +1,13 @@
 import { Box, Pagination } from "@mui/material";
 import { DataGrid, DataGridProps, GridColDef } from "@mui/x-data-grid";
+import { useSearchParams } from "react-router-dom";
 
 interface CustomDataGridProps<T> {
   rows: T[];
   columns: GridColDef[];
   pageSize: number;
   currentPage: number;
-  onSearch: (page: number) => void;
+  totalPages: number;
 }
 
 interface DataTableProps<T>
@@ -17,27 +18,30 @@ export default function DataTable<T>({
   rows,
   columns,
   pageSize,
+  totalPages,
   currentPage,
-  onSearch,
   ...dataGridProps
 }: DataTableProps<T>) {
-  const startIndex = (currentPage - 1) * pageSize;
-  const currentRows = rows.slice(startIndex, startIndex + pageSize);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     page: number,
   ) => {
-    onSearch(page);
+    setSearchParams((params) => {
+      params.set("page", String(page - 1));
+
+      return params;
+    });
   };
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
       <DataGrid
-        rows={currentRows}
+        rows={rows}
         columns={columns}
-        disableColumnResize
         hideFooter
+        disableColumnResize
         sx={{
           "& .MuiDataGrid-columnHeader": {
             backgroundColor: "#E5EDF8",
@@ -45,7 +49,6 @@ export default function DataTable<T>({
         }}
         {...dataGridProps}
       />
-
       <Box
         sx={{
           display: "flex",
@@ -54,8 +57,8 @@ export default function DataTable<T>({
         }}
       >
         <Pagination
-          count={Math.ceil(rows.length / pageSize)}
-          page={currentPage}
+          page={currentPage + 1}
+          count={totalPages}
           onChange={handlePageChange}
           hidePrevButton
           hideNextButton

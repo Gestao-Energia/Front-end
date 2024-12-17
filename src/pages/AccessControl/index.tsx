@@ -52,11 +52,9 @@ export default function AccessControl() {
     },
   ];
   const [searchQuery, SetSearchQuery] = useState<string>("");
-  const [currentPage, SetCurrentPage] = useState(1);
 
   const handleSearch = (query: string) => {
     SetSearchQuery(query);
-    SetCurrentPage(1);
   };
 
   const handleRowClick: GridEventListener<"rowClick"> = (params) => {
@@ -86,13 +84,13 @@ export default function AccessControl() {
       </Box>
       <DataTable
         loading={listAllUserQuery.isPending}
-        rows={listAllUserQuery?.data?.data ?? []}
+        rows={listAllUserQuery?.data?.data["users"] ?? []}
         columns={columns}
-        pageSize={5}
-        getRowId={(row) => row.username}
+        currentPage={parseInt(searchParams.get("page") ?? "0")}
+        totalPages={listAllUserQuery?.data?.data["totalPages"] ?? 0}
+        pageSize={parseInt(searchParams.get("size") ?? "10")}
+        getRowId={(row) => row.id}
         checkboxSelection
-        currentPage={currentPage}
-        onSearch={SetCurrentPage}
         onCellClick={handleRowClick}
       />
     </Box>
