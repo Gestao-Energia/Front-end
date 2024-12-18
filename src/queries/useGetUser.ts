@@ -10,7 +10,7 @@ export const useGetUser = ({
   id,
 }: Id): UseQueryResult<AxiosResponse<User[]>, AxiosError> => {
   const response = useQuery<AxiosResponse<User[]>, AxiosError>({
-    queryKey: ["user-data"],
+    queryKey: ["user-data", id],
     queryFn: async ({ signal }: { signal: AbortSignal }) => {
       return await api.get(`/user/${id}`, { signal });
     },
