@@ -1,5 +1,4 @@
 import {
-  Button,
   FormControl,
   Grid2,
   MenuItem,
@@ -7,12 +6,9 @@ import {
   Typography,
 } from "@mui/material";
 import TextInput from "../../../components/TextInput";
-import { UserDataProps } from "..";
+import { User } from "../../../contexts/authContext";
 
-interface EditFormProps {
-  userData: UserDataProps;
-}
-export default function EditForm() {
+export default function EditForm({ userData }: { userData: User }) {
   return (
     <FormControl
       sx={{
@@ -54,7 +50,7 @@ export default function EditForm() {
           <TextInput
             label={"Numero"}
             placeholder="Numero"
-            defaultValue={userData?.phone}
+            defaultValue={userData?.telephone}
           />
         </Grid2>
         <Grid2 size={6}>

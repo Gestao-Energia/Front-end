@@ -1,39 +1,50 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { forwardRef, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { User } from "../../contexts/authContext";
+import { useGetUser } from "../../queries/useGetUser";
 import EditForm from "./components/EditForm";
 import ProfilePicture from "./components/ProfilePicture";
 import StaticProfileInfo from "./components/StaticProfileInfo";
-import { User } from "../../contexts/authContext";
 
 const enum PageState {
   FORM = "FORM",
   STATIC = "STATIC",
 }
 
-const ComponentMapping: Record<PageState, React.FC> = {
+const ComponentMapping: Record<PageState, React.FC<{ userData: User }>> = {
   [PageState.FORM]: EditForm,
   [PageState.STATIC]: StaticProfileInfo,
 };
 
 interface CurrentComponentProps {
   pageState: PageState;
+  userData: User;
 }
 
 const CurrentComponent = forwardRef<HTMLDivElement, CurrentComponentProps>(
-  ({ pageState }, ref) => {
+  ({ pageState, userData }, ref) => {
     const Component = ComponentMapping[pageState];
 
     return (
       <div ref={ref}>
-        <Component />
+        <Component userData={userData} />
       </div>
     );
   },
 );
-
 export default function Profile() {
-  // console.log(localStorage.getItem('currentUser'))
+  const { id } = useParams<{ id: string }>();
+  const { data } = useGetUser({ id });
+
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+
+  const profileData = data?.data ?? currentUser;
+
+  console.log(profileData);
+  // console.log(currentUser);
+  // console.log(data?.data);
+  // console.log(localStorage.getItem("currentUser"));
 
   const [isEditing, setIsEditing] = useState<PageState>(PageState.STATIC);
 
@@ -66,7 +77,7 @@ export default function Profile() {
           <ProfilePicture />
         </Stack>
 
-        <CurrentComponent pageState={isEditing} />
+        <CurrentComponent pageState={isEditing} userData={profileData} />
       </Stack>
       <Box
         sx={{
