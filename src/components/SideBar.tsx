@@ -1,7 +1,7 @@
-import { NavLink } from "react-router-dom";
 import { Avatar, Stack, Typography } from "@mui/material";
-import logo from "../assets/logo.png";
+import { NavLink } from "react-router-dom";
 import ProFileImage from "../assets/DefaultProfileImage.png";
+import logo from "../assets/logo.png";
 
 export default function SideBar() {
   const navOptions = [
@@ -12,7 +12,7 @@ export default function SideBar() {
     { route: "/monitoring", label: "Monitoramento de secretaria" },
     { route: "/profile", label: "Perfil" },
   ];
-
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") ?? "{}");
   return (
     <aside
       style={{
@@ -43,10 +43,10 @@ export default function SideBar() {
             variant="h2"
             sx={{ marginBottom: "5px", color: "#FFF", fontSize: 35 }}
           >
-            Samantha
+            {currentUser.name}
           </Typography>
           <Typography variant="body1" sx={{ color: "#c5c5c5" }}>
-            samantha@email.com
+            {currentUser.email}
           </Typography>
         </div>
       </section>
