@@ -4,20 +4,14 @@ import { useLocation, useParams } from "react-router-dom";
 import EditForm from "./components/EditForm";
 import ProfilePicture from "./components/ProfilePicture";
 import StaticProfileInfo from "./components/StaticProfileInfo";
+import { User } from "../../contexts/authContext";
 
 const enum PageState {
   FORM = "FORM",
   STATIC = "STATIC",
 }
-export interface UserDataProps {
-  id: number;
-  phone: string;
-  name: string;
-  email: string;
-  role: string;
-}
 
-const ComponentMapping: Record<PageState, React.FC<UserDataProps>> = {
+const ComponentMapping: Record<PageState, React.FC> = {
   [PageState.FORM]: EditForm,
   [PageState.STATIC]: StaticProfileInfo,
 };
@@ -39,9 +33,8 @@ const CurrentComponent = forwardRef<HTMLDivElement, CurrentComponentProps>(
 );
 
 export default function Profile() {
-  const id = useParams();
-  const { state } = useLocation();
-  console.log(state);
+  // console.log(localStorage.getItem('currentUser'))
+
   const [isEditing, setIsEditing] = useState<PageState>(PageState.STATIC);
 
   const handleIsEditing = () => {
@@ -73,7 +66,7 @@ export default function Profile() {
           <ProfilePicture />
         </Stack>
 
-        <CurrentComponent userInfo={isEditing} userData={state} />
+        <CurrentComponent pageState={isEditing} />
       </Stack>
       <Box
         sx={{

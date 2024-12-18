@@ -1,9 +1,6 @@
 import { Grid2, Typography } from "@mui/material";
-import { UserDataProps } from "..";
-
-interface StaticProfileInfoProps {
-  userData: UserDataProps;
-}
+import { useGetUser } from "../../../queries/useGetUser";
+import { useParams, useSearchParams } from "react-router-dom";
 
 export default function StaticProfileInfo() {
   return (
@@ -16,23 +13,23 @@ export default function StaticProfileInfo() {
     >
       <Grid2 size={12}>
         <Typography>Nome </Typography>
-        <Typography>{userData?.name}</Typography>
+        <Typography></Typography>
       </Grid2>
       <Grid2 size={6}>
         <Typography>Email</Typography>
-        <Typography>{userData?.email}</Typography>
+        <Typography>as</Typography>
       </Grid2>
       <Grid2 size={6}>
         <Typography>User</Typography>
-        <Typography>{userData?.name}</Typography>
+        <Typography>as</Typography>
       </Grid2>
       <Grid2 size={6}>
         <Typography>Numero</Typography>
-        <Typography>{userData?.phone}</Typography>
+        <Typography>as</Typography>
       </Grid2>
       <Grid2 size={6}>
         <Typography>Tipo de Conta</Typography>
-        <Typography>{userData?.role}</Typography>
+        <Typography>as</Typography>
       </Grid2>
     </Grid2>
   );
