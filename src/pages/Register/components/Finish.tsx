@@ -3,7 +3,7 @@ import finishImage from "../../../assets/UserRegistrationFinish.png";
 import { useRegisterUserFormContext } from "../../../hooks/useRegisterUserFormContext";
 
 export default function FinishUserRegistration() {
-  const { form, onSubmit } = useRegisterUserFormContext();
+  const { form, onSubmit, isLoading } = useRegisterUserFormContext();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,6 +37,7 @@ export default function FinishUserRegistration() {
           fontWeight: 700,
           padding: "20px 60px",
         }}
+        disabled={isLoading}
         onClick={handleSubmit}
       >
         Enviar
