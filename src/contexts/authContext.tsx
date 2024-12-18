@@ -28,8 +28,8 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 );
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { token } = StorageService();
-
+  const { getToken } = StorageService();
+  const token = getToken();
   return (
     <AuthContext.Provider
       value={{

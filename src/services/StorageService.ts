@@ -20,6 +20,14 @@ export const StorageService = () => {
     setToken(newToken);
   };
 
+  const getToken = (): string | null => {
+    return localStorage.getItem(STORAGE_KEY);
+  };
+  const removeToken = (): void => {
+    localStorage.removeItem(STORAGE_KEY);
+    setToken(null);
+  };
+
   const saveCurrentUser = (user: User) => {
     localStorage.setItem(CURRENT_USER, JSON.stringify(user));
   };
@@ -29,11 +37,6 @@ export const StorageService = () => {
       return null;
     }
     return JSON.parse(currentUser);
-  };
-
-  const removeToken = (): void => {
-    localStorage.removeItem(STORAGE_KEY);
-    setToken(null);
   };
 
   const validateToken = (token: string) => {
@@ -65,5 +68,6 @@ export const StorageService = () => {
     validateToken,
     saveCurrentUser,
     getCurrentUser,
+    getToken,
   };
 };
