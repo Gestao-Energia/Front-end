@@ -7,7 +7,6 @@ import rionegro from "../../assets/rionegro-login.jpg";
 import logo from "../../assets/logo.png";
 import TextInputDefault from "../../components/TextInputDefault";
 import LogoGoverno from "../../assets/logo-gov-horizontal-contraste 1.png";
-import { useAuth } from "../../hooks/useAuth";
 import { useLogin } from "../../queries/useLogin";
 import { StorageService } from "../../services/StorageService";
 import { useAlert } from "../../hooks/useAlert";
@@ -25,11 +24,10 @@ const loginSchema = z.object({
 type LoginSchema = z.infer<typeof loginSchema>;
 
 const Login: React.FC = () => {
-  const auth = useAuth();
   const { mutateAsync: login, isPending } = useLogin();
   const navigate = useNavigate();
   const { showAlert } = useAlert();
-  const { saveToken } = StorageService();
+  const { saveToken, saveCurrentUser } = StorageService();
 
   const {
     control,
@@ -68,7 +66,7 @@ const Login: React.FC = () => {
   };
 
   const handleLoginSuccess = async (userData: UserWithToken) => {
-    auth?.registerCurrentUser({
+    await saveCurrentUser({
       name: userData.name,
       email: userData.email,
       username: userData.username,
@@ -84,7 +82,6 @@ const Login: React.FC = () => {
       message: "Login realizado com sucesso",
       severity: "success",
     });
-    localStorage.setItem("currentUser", JSON.stringify(userData));
     navigate("/dashboard");
   };
 
