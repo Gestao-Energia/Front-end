@@ -7,7 +7,7 @@ import { User } from "../contexts/authContext";
 import { AxiosError, AxiosResponse } from "axios";
 import { api } from "../lib/axios";
 
-interface Paginated {
+export interface Paginated {
   page: string;
   size?: string;
 }

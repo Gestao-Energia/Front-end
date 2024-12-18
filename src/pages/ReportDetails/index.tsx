@@ -11,14 +11,19 @@ import SearchBar from "../../components/SearchBar";
 import {
   Box,
   Button,
+  CircularProgress,
   IconButton,
   Menu,
   MenuItem,
   Stack,
   Typography,
 } from "@mui/material";
+import html2canvas from "html2canvas";
 import TuneIcon from "@mui/icons-material/Tune";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useConsumption } from "../../queries/useConsumption";
+import { useAlert } from "../../hooks/useAlert";
 
 enum FilterOptions {
   ANNUAL = "Anual",
@@ -40,14 +45,63 @@ const chartSetting = {
 };
 
 export default function ReportDetails() {
+  const { reportId } = useParams();
+  const { showAlert } = useAlert();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [periodicity, setPeriodicity] = useState<FilterOptions>(
     FilterOptions.ANNUAL,
   );
-
   const open = Boolean(anchorEl);
-
   const filterOptions = Object.values(FilterOptions);
+  const chartRef = useRef(null);
+  const reportQuery = useConsumption({
+    id: reportId ?? "",
+    enabled: !!reportId,
+  });
+
+  const exportAsImage = async () => {
+    try {
+      const element = chartRef.current;
+      if (!element) {
+        showAlert({
+          severity: "error",
+          title: "Erro",
+          message: "Erro ao exportar o gráfico.",
+        });
+        return;
+      }
+
+      if (!reportQuery?.data?.data?.department?.name || !periodicity) {
+        showAlert({
+          severity: "error",
+          title: "Erro",
+          message: "Dados necessários não estão disponíveis.",
+        });
+        return;
+      }
+
+      const canvas = await html2canvas(element);
+      const dataURL = canvas.toDataURL("image/png");
+
+      const departmentName = reportQuery.data.data.department.name
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w-]/g, "");
+      const fileName = `consumo-${departmentName}-${periodicity.toLowerCase()}.png`;
+
+      const link = document.createElement("a");
+      link.href = dataURL;
+      link.download = fileName;
+      link.click();
+    } catch (error) {
+      showAlert({
+        severity: "error",
+        title: "Erro",
+        message: "Erro ao exportar imagem.",
+      });
+      console.error("Erro ao exportar imagem:", error);
+    }
+  };
 
   const handleOpenFilterMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -159,62 +213,78 @@ export default function ReportDetails() {
         alignItems={"center"}
         mt={"1.875rem"}
       >
-        <Typography fontWeight={500} fontSize={"1.5rem"} lineHeight={"2.25rem"}>
-          Energia Sead
+        <Typography
+          fontWeight={500}
+          fontSize={"1.5rem"}
+          lineHeight={"2.25rem"}
+          textTransform={"capitalize"}
+        >
+          {reportQuery.data?.data.department.name.toLocaleLowerCase()}
         </Typography>
         <Typography fontWeight={500} fontSize={"1.5rem"} lineHeight={"2.25rem"}>
           {periodicity}
         </Typography>
       </Stack>
-      <Box sx={{ height: "70%" }}>
-        <ResponsiveChartContainer
-          {...chartSetting}
-          series={[
-            {
-              type: "bar",
-              data: chartData,
-            },
-          ]}
-          xAxis={[
-            {
-              data: labels,
-              scaleType: "band",
-              id: "x-axis-id",
-            },
-          ]}
-          yAxis={[
-            {
-              min: 0,
-              max: Math.max(...chartData),
-              scaleType: "linear",
-              id: "y-axis-id",
-              valueFormatter: (value) => `${value} kw`,
-            },
-          ]}
-        >
-          <ChartsTooltip />
-          <BarPlot borderRadius={10} />
-          <ChartsXAxis position="bottom" axisId="x-axis-id" />
-          <ChartsYAxis position="left" axisId="y-axis-id" />
-          <ChartsReferenceLine y={Math.max(...chartData) / 2} />
-        </ResponsiveChartContainer>
-      </Box>
-      <Stack>
-        <Button
-          variant="outlined"
-          sx={{
-            borderColor: "#2C3E50",
-            borderRadius: "2.5rem",
-            color: "#2C3E50",
-            fontSize: "1.125rem",
-            fontWeight: 700,
-            padding: "20px 60px",
-            alignSelf: "end",
-          }}
-        >
-          Imprimir
-        </Button>
-      </Stack>
+      {reportQuery.isPending ? (
+        <Box textAlign={"center"} mt={"15rem"}>
+          <CircularProgress size="3rem" />
+        </Box>
+      ) : (
+        <>
+          <Box ref={chartRef} sx={{ height: "70%" }}>
+            <ResponsiveChartContainer
+              {...chartSetting}
+              series={[
+                {
+                  type: "bar",
+                  data: chartData,
+                },
+              ]}
+              xAxis={[
+                {
+                  data: labels,
+                  scaleType: "band",
+                  id: "x-axis-id",
+                },
+              ]}
+              yAxis={[
+                {
+                  min: 0,
+                  max: Math.max(...chartData),
+                  scaleType: "linear",
+                  id: "y-axis-id",
+                  valueFormatter: (value) => `${value} kw`,
+                },
+              ]}
+            >
+              <ChartsTooltip />
+              <BarPlot borderRadius={10} />
+              <ChartsXAxis position="bottom" axisId="x-axis-id" />
+              <ChartsYAxis position="left" axisId="y-axis-id" />
+              <ChartsReferenceLine y={Math.max(...chartData) / 2} />
+            </ResponsiveChartContainer>
+          </Box>
+          <Stack>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                exportAsImage();
+              }}
+              sx={{
+                borderColor: "#2C3E50",
+                borderRadius: "2.5rem",
+                color: "#2C3E50",
+                fontSize: "1.125rem",
+                fontWeight: 700,
+                padding: "20px 60px",
+                alignSelf: "end",
+              }}
+            >
+              Imprimir
+            </Button>
+          </Stack>
+        </>
+      )}
     </>
   );
 }
