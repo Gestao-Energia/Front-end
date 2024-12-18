@@ -84,7 +84,7 @@ export default function RegisterUserForm() {
 
           <Grid>
             <Controller
-              name="contactNumber"
+              name="telephone"
               control={form.control}
               render={({ field }) => (
                 <>
@@ -96,14 +96,14 @@ export default function RegisterUserForm() {
                     value={field.value ?? ""}
                     onChange={(e) => field.onChange(e.target.value)}
                   />
-                  {form.formState.errors.contactNumber && (
+                  {form.formState.errors.telephone && (
                     <Typography
                       variant="body1"
                       textAlign={"start"}
                       sx={{ m: 1 }}
                       color="red"
                     >
-                      {form.formState.errors?.contactNumber?.message}
+                      {form.formState.errors?.telephone?.message}
                     </Typography>
                   )}
                 </>
@@ -113,7 +113,7 @@ export default function RegisterUserForm() {
 
           <Grid>
             <Controller
-              name="userName"
+              name="username"
               control={form.control}
               render={({ field }) => (
                 <>
@@ -124,14 +124,14 @@ export default function RegisterUserForm() {
                     value={field.value ?? ""}
                     onChange={(e) => field.onChange(e.target.value)}
                   />
-                  {form.formState.errors.userName && (
+                  {form.formState.errors.username && (
                     <Typography
                       variant="body1"
                       textAlign={"start"}
                       sx={{ m: 1 }}
                       color="red"
                     >
-                      {form.formState.errors?.userName?.message}
+                      {form.formState.errors?.username?.message}
                     </Typography>
                   )}
                 </>

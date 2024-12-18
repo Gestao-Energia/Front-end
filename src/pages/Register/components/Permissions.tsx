@@ -23,8 +23,8 @@ export default function RegisterUserPermissions() {
             <>
               <Stack direction={"row"} justifyContent={"center"} gap={5} mb={5}>
                 <ToggleButton
-                  value="Administrador"
-                  selected={field.value === "Administrador"}
+                  value="ADMIN"
+                  selected={field.value === "ADMIN"}
                   sx={{
                     background: "#FFF",
                     boxShadow: "0px 4px 10px 0px #1F255912",
@@ -33,21 +33,21 @@ export default function RegisterUserPermissions() {
                     fontSize: "18px",
                     fontWeight: 500,
                     border:
-                      field.value === "Administrador"
+                      field.value === "ADMIN"
                         ? "2px solid #2C3E50"
                         : "2px solid transparent",
                     borderRadius: "16px",
                     padding: "50px 70px",
                     width: "270px",
                   }}
-                  onChange={() => field.onChange("Administrador")}
+                  onChange={() => field.onChange("ADMIN")}
                 >
                   Administrador
                 </ToggleButton>
 
                 <ToggleButton
                   value="Gestor"
-                  selected={field.value === "Gestor"}
+                  selected={field.value === "MANAGER"}
                   sx={{
                     background: "#FFF",
                     boxShadow: "0px 4px 10px 0px #1F255912",
@@ -56,14 +56,14 @@ export default function RegisterUserPermissions() {
                     fontSize: "18px",
                     fontWeight: 500,
                     border:
-                      field.value === "Gestor"
+                      field.value === "MANAGER"
                         ? "2px solid #2C3E50"
                         : "2px solid transparent",
                     borderRadius: "16px",
                     padding: "50px 70px",
                     width: "270px",
                   }}
-                  onChange={() => field.onChange("Gestor")}
+                  onChange={() => field.onChange("MANAGER")}
                 >
                   Gestor
                 </ToggleButton>
@@ -71,7 +71,7 @@ export default function RegisterUserPermissions() {
 
               <ToggleButton
                 value="Operador"
-                selected={field.value === "Operador"}
+                selected={field.value === "COMMON"}
                 sx={{
                   background: "#FFF",
                   boxShadow: "0px 4px 10px 0px #1F255912",
@@ -80,14 +80,14 @@ export default function RegisterUserPermissions() {
                   fontSize: "18px",
                   fontWeight: 500,
                   border:
-                    field.value === "Operador"
+                    field.value === "COMMON"
                       ? "2px solid #2C3E50"
                       : "2px solid transparent",
                   borderRadius: "16px",
                   padding: "50px 70px",
                   width: "270px",
                 }}
-                onChange={() => field.onChange("Operador")}
+                onChange={() => field.onChange("COMMON")}
               >
                 Operador
               </ToggleButton>
