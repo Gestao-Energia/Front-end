@@ -1,104 +1,39 @@
 import { Box } from "@mui/material";
-import { GridColDef } from "@mui/x-data-grid";
+import { GridColDef, GridEventListener } from "@mui/x-data-grid";
+import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import DataTable from "../../components/DataTable";
 import SearchBar from "../../components/SearchBar";
-import { useState } from "react";
+import { useListAllUsers } from "../../queries/useListAllUsersPaginated";
 
-interface Row {
-  id: number;
-  telefone: string;
-  nome: string;
-  email: string;
-  tipoConta: string;
-}
 export default function AccessControl() {
-  const rows: Row[] = [
-    {
-      id: 1,
-      telefone: "11987654321",
-      nome: "Jon Snow",
-      email: "jon.snow@wall.com",
-      tipoConta: "administrador",
-    },
-    {
-      id: 2,
-      telefone: "11923456789",
-      nome: "Cersei Lannister",
-      email: "cersei.lannister@lannister.com",
-      tipoConta: "usuario",
-    },
-    {
-      id: 3,
-      telefone: "11976543210",
-      nome: "Jaime Lannister",
-      email: "jaime.lannister@lannister.com",
-      tipoConta: "moderador",
-    },
-    {
-      id: 4,
-      telefone: "11987651234",
-      nome: "Arya Stark",
-      email: "arya.stark@stark.com",
-      tipoConta: "usuario",
-    },
-    {
-      id: 5,
-      telefone: "11998765432",
-      nome: "Daenerys Targaryen",
-      email: "daenerys@targaryen.com",
-      tipoConta: "administrador",
-    },
-    {
-      id: 6,
-      telefone: "11987654321",
-      nome: "Melisandre",
-      email: "melisandre@redgod.com",
-      tipoConta: "moderador",
-    },
-    {
-      id: 7,
-      telefone: "11998765123",
-      nome: "Ferrara Clifford",
-      email: "clifford@france.com",
-      tipoConta: "usuario",
-    },
-    {
-      id: 8,
-      telefone: "11999998888",
-      nome: "Rossini Frances",
-      email: "rossini@italy.com",
-      tipoConta: "usuario",
-    },
-    {
-      id: 9,
-      telefone: "11912345678",
-      nome: "Harvey Roxie",
-      email: "roxie@legal.com",
-      tipoConta: "moderador",
-    },
-  ];
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const listAllUserQuery = useListAllUsers({
+    page: searchParams.get("page") ?? "0",
+    size: searchParams.get("size") ?? "10",
+  });
 
   function formatarTelefone(telefone: string) {
     const cleanedPhoneNumber = telefone.replace(/\D/g, "");
     return `(${cleanedPhoneNumber.slice(0, 2)}) ${cleanedPhoneNumber.slice(2, 7)}-${cleanedPhoneNumber.slice(7)}`;
   }
 
-  const columns: GridColDef<(typeof rows)[number]>[] = [
-    { field: "id", headerName: "ID", width: 90 },
+  const columns: GridColDef[] = [
     {
-      field: "nome",
+      field: "name",
       headerName: "Nome",
       flex: 0.2,
       editable: false,
     },
     {
       field: "email",
-      headerName: "Last name",
+      headerName: "Email",
       flex: 0.2,
       editable: false,
     },
     {
-      field: "telefone",
+      field: "telephone",
       headerName: "Telefone",
       type: "string",
       flex: 0.2,
@@ -109,7 +44,7 @@ export default function AccessControl() {
       },
     },
     {
-      field: "tipoConta",
+      field: "role",
       headerName: "Tipo de Conta",
       type: "string",
       flex: 0.2,
@@ -122,17 +57,9 @@ export default function AccessControl() {
     SetSearchQuery(query);
   };
 
-  const filteredRows = rows.filter(
-    (row) =>
-      Object.values(row).some((value) =>
-        String(value).toLowerCase().includes(searchQuery.toLowerCase()),
-      ),
-    // row.nome.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    // row.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    // row.telefone.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    // row.tipoConta.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
+  const handleRowClick: GridEventListener<"rowClick"> = (params) => {
+    navigate(`/accessControl/profile/${params.id}`);
+  };
   return (
     <Box
       sx={{
@@ -145,6 +72,7 @@ export default function AccessControl() {
         backgroundColor: "#F8F8F8",
       }}
     >
+      <></>
       <Box
         sx={{
           backgroundColor: "#E5EDF8",
@@ -154,7 +82,17 @@ export default function AccessControl() {
       >
         <SearchBar onSearch={handleSearch} />
       </Box>
-      <DataTable rows={filteredRows} columns={columns} pageSize={5} />
+      <DataTable
+        loading={listAllUserQuery.isPending}
+        rows={listAllUserQuery?.data?.data["users"] ?? []}
+        columns={columns}
+        currentPage={parseInt(searchParams.get("page") ?? "0")}
+        totalPages={listAllUserQuery?.data?.data["totalPages"] ?? 0}
+        pageSize={parseInt(searchParams.get("size") ?? "10")}
+        getRowId={(row) => row.id}
+        checkboxSelection
+        onCellClick={handleRowClick}
+      />
     </Box>
   );
 }

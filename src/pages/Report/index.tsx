@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
-import SearchBar from "../../components/SearchBar";
-import DataTable from "../../components/DataTable";
-import { useState } from "react";
 import { GridColDef, GridEventListener } from "@mui/x-data-grid";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import DataTable from "../../components/DataTable";
+import SearchBar from "../../components/SearchBar";
 
 interface DemandReportRowTable {
   id: string;
@@ -265,13 +265,21 @@ const columns: GridColDef<(typeof rows)[number]>[] = [
 ];
 
 export default function Report() {
-  const [searchQuery, setSearchQuery] = useState<string>("");
   const navigate = useNavigate();
 
+  const [searchQuery, SetSearchQuery] = useState<string>("");
+  const [currentPage, SetCurrentPage] = useState(1);
+
   const handleSearch = (query: string) => {
-    setSearchQuery(query);
+    SetSearchQuery(query);
+    SetCurrentPage(1);
   };
 
+  const filteredRows = rows.filter((row) =>
+    Object.values(row).some((value) =>
+      String(value).toLowerCase().includes(searchQuery.toLowerCase()),
+    ),
+  );
   const handleRowClick: GridEventListener<"rowClick"> = (params) => {
     navigate(`/report/${params.id}`);
   };
@@ -300,9 +308,11 @@ export default function Report() {
       <DataTable
         onRowClick={handleRowClick}
         checkboxSelection
-        rows={rows}
+        rows={filteredRows}
         columns={columns}
         pageSize={10}
+        currentPage={currentPage}
+        totalPages={10}
       />
     </Box>
   );
