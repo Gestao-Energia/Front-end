@@ -57,15 +57,13 @@ export const UpdateUserFormProvider = ({
     },
   });
 
-  const { mutate, isSuccess } = useUpdateUser({
-    id: "",
-  });
+  const updateUserQuery = useUpdateUser();
+
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    await mutate({ data });
     console.log(data);
-    if (isSuccess) {
-      return console.log("funcinou");
-    }
+    // if (isSuccess) {
+    //   return console.log("funcinou");
+    // }
   };
 
   return (

@@ -3,19 +3,22 @@ import { AxiosResponse } from "axios";
 import { User } from "../contexts/authContext";
 import { api } from "../lib/axios";
 
-interface Id {
+interface UpdateUserProps {
   id: string | null;
+  data: User;
 }
 
-export const useUpdateUser = ({
-  id,
-}: Id): UseMutationResult<AxiosResponse<User>, Error, { data: User }> => {
+export const useUpdateUser = (): UseMutationResult<
+  AxiosResponse<User>,
+  Error
+> => {
   const mutate = useMutation<AxiosResponse<User>, Error, { data: User }>({
-    mutationFn: async ({ data }) => {
+    mutationFn: async ({ id, data }: UpdateUserProps) => {
       const formData = new FormData();
       Object.entries(data).forEach(([key, value]) => {
         formData.append(key, value as string | Blob);
       });
+
       console.log(id);
       return await api.put(`/user/${id}`, formData, {
         headers: {
