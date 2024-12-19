@@ -1,6 +1,7 @@
 import {
   axisClasses,
   BarPlot,
+  ChartsTooltip,
   ChartsXAxis,
   ChartsYAxis,
   ResponsiveChartContainer,
@@ -64,6 +65,7 @@ export default function BarChartGraph() {
         },
       ]}
     >
+      <ChartsTooltip />
       <BarPlot />
       <ChartsXAxis position="bottom" axisId="x-axis-id" />
       <ChartsYAxis label="Consumo KW/Mês" position="left" />

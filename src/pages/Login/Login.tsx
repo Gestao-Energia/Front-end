@@ -84,7 +84,7 @@ const Login: React.FC = () => {
       message: "Login realizado com sucesso",
       severity: "success",
     });
-
+    localStorage.setItem("currentUser", JSON.stringify(userData));
     navigate("/dashboard");
   };
 
