@@ -1,14 +1,15 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode } from "react";
 import { StorageService } from "../services/StorageService";
 
 export interface User {
+  id: string;
   name: string;
   email: string;
   telephone: string;
   username: string;
   role: UserRole;
   profileImageUrl?: string | null;
-  password?: string | null;
+  password?: string | null | null;
 }
 
 export interface UserWithToken extends User {
@@ -21,8 +22,6 @@ export enum UserRole {
   Common = "COMMON",
 }
 interface AuthContextType {
-  registerCurrentUser: (data: User) => void;
-  currentUser: User | null;
   token: string | null;
 }
 
@@ -31,18 +30,11 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 );
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const { token } = StorageService();
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-
-  const registerCurrentUser = (user: User) => {
-    setCurrentUser(user);
-  };
-
+  const { getToken } = StorageService();
+  const token = getToken();
   return (
     <AuthContext.Provider
       value={{
-        registerCurrentUser,
-        currentUser,
         token,
       }}
     >

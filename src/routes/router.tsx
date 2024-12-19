@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { RegisterUserFormProvider } from "../contexts/registerUserContext";
+import { UpdateUserFormProvider } from "../contexts/updateUserContext";
 import DefaultLayout from "../layout/DefautltLayout";
 import AccessControl from "../pages/AccessControl";
 import Dashboard from "../pages/Dashboard";
@@ -28,10 +29,25 @@ export default function Router() {
             }
           />
           <Route path="/accessControl" element={<AccessControl />} />
-          <Route path="/accessControl/profile/:id" element={<Profile />} />
+          <Route
+            path="/accessControl/profile/:id"
+            element={
+              <UpdateUserFormProvider>
+                <Profile />
+              </UpdateUserFormProvider>
+            }
+          />
           <Route path="/report" element={<Report />} />
           <Route path="/report/:reportId" element={<ReportDetails />} />
           <Route path="/monitoring" element={<Monitoring />} />
+          <Route
+            path="/profile"
+            element={
+              <UpdateUserFormProvider>
+                <Profile />
+              </UpdateUserFormProvider>
+            }
+          />
           <Route path="/profile" element={<Profile />} />
           <Route path="/upload" element={<UploadFiles />} />
         </Route>

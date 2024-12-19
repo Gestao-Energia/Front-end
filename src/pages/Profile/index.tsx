@@ -1,41 +1,63 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { forwardRef, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { User } from "../../contexts/authContext";
+import { useUpdateUserFormContext } from "../../hooks/useUpdateUserFormContext";
+import { useGetUser } from "../../queries/useGetUser";
+import { StorageService } from "../../services/StorageService";
 import EditForm from "./components/EditForm";
 import ProfilePicture from "./components/ProfilePicture";
 import StaticProfileInfo from "./components/StaticProfileInfo";
-import { User } from "../../contexts/authContext";
 
 const enum PageState {
   FORM = "FORM",
   STATIC = "STATIC",
 }
 
-const ComponentMapping: Record<PageState, React.FC> = {
+const ComponentMapping: Record<
+  PageState,
+  React.FC<{ userData: User | null }>
+> = {
   [PageState.FORM]: EditForm,
   [PageState.STATIC]: StaticProfileInfo,
 };
 
 interface CurrentComponentProps {
   pageState: PageState;
+  userData: User | null;
 }
 
 const CurrentComponent = forwardRef<HTMLDivElement, CurrentComponentProps>(
-  ({ pageState }, ref) => {
+  ({ pageState, userData }, ref) => {
     const Component = ComponentMapping[pageState];
-
+    if (!userData) {
+      return <div>Algo deu errado</div>;
+    }
     return (
       <div ref={ref}>
-        <Component />
+        <Component userData={userData} />
       </div>
     );
   },
 );
-
 export default function Profile() {
-  // console.log(localStorage.getItem('currentUser'))
+  const { id } = useParams<{ id: string }>();
+  const { data } = useGetUser({ id });
+  const { getCurrentUser } = StorageService();
+  const currentUser = getCurrentUser();
+
+  const profileData = data?.data ?? currentUser;
+
+  // console.log(profileData);
 
   const [isEditing, setIsEditing] = useState<PageState>(PageState.STATIC);
+  const { form, onSubmit } = useUpdateUserFormContext();
+  form.setValue("id", profileData?.id ?? "");
+  // console.log(form.getValues());
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(form.getValues());
+  };
 
   const handleIsEditing = () => {
     setIsEditing(PageState.FORM);
@@ -66,7 +88,7 @@ export default function Profile() {
           <ProfilePicture />
         </Stack>
 
-        <CurrentComponent pageState={isEditing} />
+        <CurrentComponent pageState={isEditing} userData={profileData} />
       </Stack>
       <Box
         sx={{
@@ -121,7 +143,7 @@ export default function Profile() {
             visibility: isEditing == PageState.FORM ? "visible" : "hidden",
             display: isEditing == PageState.FORM ? "block" : "none",
           }}
-          onClick={handleBack}
+          onClick={handleSubmit}
         >
           Salvar
         </Button>
