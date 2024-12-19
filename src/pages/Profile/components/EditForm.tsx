@@ -8,7 +8,7 @@ import {
 import TextInput from "../../../components/TextInput";
 import { User } from "../../../contexts/authContext";
 
-export default function EditForm({ userData }: { userData: User }) {
+export default function EditForm({ userData }: { userData: User | null }) {
   return (
     <FormControl
       sx={{
@@ -60,7 +60,7 @@ export default function EditForm({ userData }: { userData: User }) {
           <Select
             variant="standard"
             disableUnderline
-            defaultValue={userData.role}
+            defaultValue={userData?.role}
             sx={{
               width: "100%",
               borderRadius: "50px",

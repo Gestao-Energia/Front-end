@@ -6,26 +6,32 @@ import { useGetUser } from "../../queries/useGetUser";
 import EditForm from "./components/EditForm";
 import ProfilePicture from "./components/ProfilePicture";
 import StaticProfileInfo from "./components/StaticProfileInfo";
+import { StorageService } from "../../services/StorageService";
 
 const enum PageState {
   FORM = "FORM",
   STATIC = "STATIC",
 }
 
-const ComponentMapping: Record<PageState, React.FC<{ userData: User }>> = {
+const ComponentMapping: Record<
+  PageState,
+  React.FC<{ userData: User | null }>
+> = {
   [PageState.FORM]: EditForm,
   [PageState.STATIC]: StaticProfileInfo,
 };
 
 interface CurrentComponentProps {
   pageState: PageState;
-  userData: User;
+  userData: User | null;
 }
 
 const CurrentComponent = forwardRef<HTMLDivElement, CurrentComponentProps>(
   ({ pageState, userData }, ref) => {
     const Component = ComponentMapping[pageState];
-
+    if (!userData) {
+      return <div>Algo deu errado</div>;
+    }
     return (
       <div ref={ref}>
         <Component userData={userData} />
@@ -36,15 +42,12 @@ const CurrentComponent = forwardRef<HTMLDivElement, CurrentComponentProps>(
 export default function Profile() {
   const { id } = useParams<{ id: string }>();
   const { data } = useGetUser({ id });
-
-  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+  const { getCurrentUser } = StorageService();
+  const currentUser = getCurrentUser();
 
   const profileData = data?.data ?? currentUser;
 
   console.log(profileData);
-  // console.log(currentUser);
-  // console.log(data?.data);
-  // console.log(localStorage.getItem("currentUser"));
 
   const [isEditing, setIsEditing] = useState<PageState>(PageState.STATIC);
 
