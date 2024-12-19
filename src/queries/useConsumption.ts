@@ -27,6 +27,6 @@ export const useConsumption = ({
     queryFn: async ({ signal }: { signal: AbortSignal }) => {
       return await api.get(`/consumption/get/${id}`, { signal });
     },
-    ...options, // inclui apenas as opções permitidas
+    ...options,
   });
 };
