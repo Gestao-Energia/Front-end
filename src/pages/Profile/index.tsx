@@ -2,11 +2,12 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import { forwardRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { User } from "../../contexts/authContext";
+import { useUpdateUserFormContext } from "../../hooks/useUpdateUserFormContext";
 import { useGetUser } from "../../queries/useGetUser";
+import { StorageService } from "../../services/StorageService";
 import EditForm from "./components/EditForm";
 import ProfilePicture from "./components/ProfilePicture";
 import StaticProfileInfo from "./components/StaticProfileInfo";
-import { StorageService } from "../../services/StorageService";
 
 const enum PageState {
   FORM = "FORM",
@@ -47,9 +48,16 @@ export default function Profile() {
 
   const profileData = data?.data ?? currentUser;
 
-  console.log(profileData);
+  // console.log(profileData);
 
   const [isEditing, setIsEditing] = useState<PageState>(PageState.STATIC);
+  const { form, onSubmit } = useUpdateUserFormContext();
+  form.setValue("id", profileData?.id ?? "");
+  // console.log(form.getValues());
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(form.getValues());
+  };
 
   const handleIsEditing = () => {
     setIsEditing(PageState.FORM);
@@ -135,7 +143,7 @@ export default function Profile() {
             visibility: isEditing == PageState.FORM ? "visible" : "hidden",
             display: isEditing == PageState.FORM ? "block" : "none",
           }}
-          onClick={handleBack}
+          onClick={handleSubmit}
         >
           Salvar
         </Button>

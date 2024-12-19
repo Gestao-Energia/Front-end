@@ -1,6 +1,6 @@
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
-import { User } from "../contexts/authContext";
 import { AxiosResponse } from "axios";
+import { User } from "../contexts/authContext";
 import { api } from "../lib/axios";
 
 interface Id {
@@ -16,6 +16,7 @@ export const useUpdateUser = ({
       Object.entries(data).forEach(([key, value]) => {
         formData.append(key, value as string | Blob);
       });
+      console.log(id);
       return await api.put(`/user/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
