@@ -10,6 +10,7 @@ import Register from "../pages/Register";
 import Report from "../pages/Report";
 import ReportDetails from "../pages/ReportDetails";
 import PrivateRoute from "./PrivateRoute";
+import UploadFiles from "../pages/Upload";
 
 export default function Router() {
   return (
@@ -32,6 +33,7 @@ export default function Router() {
           <Route path="/report/:reportId" element={<ReportDetails />} />
           <Route path="/monitoring" element={<Monitoring />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/upload" element={<UploadFiles />} />
         </Route>
       </Route>
 

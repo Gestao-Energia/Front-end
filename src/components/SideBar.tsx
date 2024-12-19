@@ -11,6 +11,7 @@ export default function SideBar() {
     { route: "/report", label: "Relatorio de consumo" },
     { route: "/monitoring", label: "Monitoramento de secretaria" },
     { route: "/profile", label: "Perfil" },
+    { route: "/upload", label: "Upload" },
   ];
 
   return (
