@@ -2,6 +2,7 @@ import { createContext, ReactNode } from "react";
 import { StorageService } from "../services/StorageService";
 
 export interface User {
+  id: string;
   name: string;
   email: string;
   telephone: string;

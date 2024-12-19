@@ -67,6 +67,7 @@ const Login: React.FC = () => {
 
   const handleLoginSuccess = async (userData: UserWithToken) => {
     await saveCurrentUser({
+      id: userData.id,
       name: userData.name,
       email: userData.email,
       username: userData.username,
