@@ -1,29 +1,35 @@
-import React from "react";
-import card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
-import { Box } from "@mui/material";
-import stack from "@mui/material/Stack";
-import { Gauge } from "@mui/x-charts/Gauge";
+import { Box, Stack } from "@mui/material";
+import GaugeGraph from "../Dashboard/components/GaugeGraph";
+import FlashOnIcon from "@mui/icons-material/FlashOn";
 
 export default function Monitoring() {
   return (
     <Box>
-      <Card sx={{ maxWidth: 205, maxHeight: 300 }}>
-        <Typography sx={{ textAlign: "center" }}>Secretaria</Typography>
-
-        <CardContent>
-          <Gauge
-            width={100}
-            height={100}
-            value={50}
-            valueMin={10}
-            valueMax={60}
-          />
+      <Card
+        sx={{ maxWidth: "205px", maxHeight: "300px", borderRadius: "10px" }}
+        variant="outlined"
+      >
+        <CardContent sx={{ bgcolor: "#2C3E50" }}>
+          <Stack alignItems={"center"}>
+            <FlashOnIcon
+              sx={{ color: "#00FF00", width: "50px", height: "42px" }}
+            />
+            <Typography
+              sx={{ color: "white", fontWeight: "700", fontSize: "20px" }}
+            >
+              Sefaz
+            </Typography>
+            <GaugeGraph
+              width={131}
+              color="#00FF00"
+              labelSize={20}
+              value={50}
+              height={148}
+            />
+          </Stack>
         </CardContent>
       </Card>
     </Box>
