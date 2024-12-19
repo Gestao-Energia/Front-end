@@ -60,7 +60,14 @@ export const UpdateUserFormProvider = ({
   const updateUserQuery = useUpdateUser();
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    console.log(data);
+    updateUserQuery.mutateAsync(
+      { id: data.id, data: data },
+      {
+        onSuccess: () => {
+          console.log("sucesso");
+        },
+      },
+    );
     // if (isSuccess) {
     //   return console.log("funcinou");
     // }

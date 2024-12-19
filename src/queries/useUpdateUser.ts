@@ -10,16 +10,17 @@ interface UpdateUserProps {
 
 export const useUpdateUser = (): UseMutationResult<
   AxiosResponse<User>,
-  Error
+  Error,
+  UpdateUserProps
 > => {
-  const mutate = useMutation<AxiosResponse<User>, Error, { data: User }>({
+  const mutate = useMutation<AxiosResponse<User>, Error, UpdateUserProps>({
     mutationFn: async ({ id, data }: UpdateUserProps) => {
       const formData = new FormData();
       Object.entries(data).forEach(([key, value]) => {
-        formData.append(key, value as string | Blob);
+        if (value !== null && value !== undefined) {
+          formData.append(key, value as string | Blob);
+        }
       });
-
-      console.log(id);
       return await api.put(`/user/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
